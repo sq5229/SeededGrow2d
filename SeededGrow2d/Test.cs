@@ -61,12 +61,12 @@ namespace SeededGrow2d
         {
             {
                 FloodFill2d_T ff = new FloodFill2d_T();
-                ff.ExcuteFloodFill_S(bmp, seed);
+                ff.ExcuteFloodFill_Stack(bmp, seed);
                 ff.report.PrintInfo();
             }
             {
                 FloodFill2d_T ff = new FloodFill2d_T();
-                ff.ExcuteFloodFill_Q(bmp, seed);
+                ff.ExcuteFloodFill_Queue(bmp, seed);
                 ff.report.PrintInfo();
             }
         }
@@ -74,12 +74,12 @@ namespace SeededGrow2d
         {
             {
                 ScanlineFill2d_T ff = new ScanlineFill2d_T();
-                ff.ExcuteScanlineFill_S(bmp, seed);
+                ff.ExcuteScanlineFill_Stack(bmp, seed);
                 ff.report.PrintInfo();
             }
             {
                 ScanlineFill2d_T ff = new ScanlineFill2d_T();
-                ff.ExcuteScanlineFill_Q(bmp, seed);
+                ff.ExcuteScanlineFill_Queue(bmp, seed);
                 ff.report.PrintInfo();
             }
         }
@@ -87,12 +87,12 @@ namespace SeededGrow2d
         {
             {
                 SpanFill2d_T ff2 = new SpanFill2d_T();
-                ff2.ExcuteSpanFill_S(bmp, seed);
+                ff2.ExcuteSpanFill_Stack(bmp, seed);
                 ff2.report.PrintInfo();
             }
             {
                 SpanFill2d_T ff2 = new SpanFill2d_T();
-                ff2.ExcuteSpanFill_Q(bmp, seed);
+                ff2.ExcuteSpanFill_Queue(bmp, seed);
                 ff2.report.PrintInfo();
                 //ff2.report.OutPutMap(ff2.flagsMap, "result.bmp");
             }
@@ -142,7 +142,7 @@ namespace SeededGrow2d
             }
             {
                 SpanFill2d_T ff = new SpanFill2d_T();
-                ff.ExcuteSpanFill_S(bmp, seed_1);
+                ff.ExcuteSpanFill_Stack(bmp, seed_1);
                 ff.report.PrintInfo();
             }
         }

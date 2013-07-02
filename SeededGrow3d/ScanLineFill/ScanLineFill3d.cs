@@ -3,47 +3,51 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-namespace SeededGrow2d
+namespace SeededGrow3d.ScanLineFill
 {
-    class ScanlineFill2d
+    class ScanlineFill3d
     {
         protected int count = 0;
-        protected Container<Int16Double> container;//这个容器可以是Queue和Stack中任意一种，这里抽象成一个Container
-        protected BitMap2d bmp;
-        public FlagMap2d flagsMap;
-        protected virtual void ExcuteScanlineFill(BitMap2d data, Int16Double seed)
+        protected Container<Int16Triple> container;//这个容器可以是Queue和Stack中任意一种，这里抽象成一个Container
+        protected BitMap3d bmp;
+        public FlagMap3d flagsMap;
+        protected virtual void ExcuteScanlineFill(BitMap3d data, Int16Triple seed)
         {
             this.bmp = data;
             data.ResetVisitCount();
-            flagsMap = new FlagMap2d(data.width, data.height);
-            flagsMap.SetFlagOn(seed.X, seed.Y, true);
+            flagsMap = new FlagMap3d(data.width, data.height, data.depth);
+            flagsMap.SetFlagOn(seed.X, seed.Y, seed.Z, true);
             container.Push(seed);
             Process(seed);
             while (!container.Empty())
             {
-                Int16Double p = container.Pop();
+                Int16Triple p = container.Pop();
                 int xleft = FindXLeft(p);
                 int xright = FindXRight(p);
                 if (p.Y - 1 >= 0)
-                    CheckRange(xleft, xright, p.Y - 1);
+                    CheckRange(xleft, xright, p.Y - 1, p.Z);
                 if (p.Y + 1 < data.height)
-                    CheckRange(xleft, xright, p.Y + 1);
+                    CheckRange(xleft, xright, p.Y + 1, p.Z);
+                if (p.Z - 1 >= 0)
+                    CheckRange(xleft, xright, p.Y, p.Z - 1);
+                if (p.Z + 1 < data.depth)
+                    CheckRange(xleft, xright, p.Y, p.Z + 1);
             }
         }//该函数为扫描线法主体
-        protected void CheckRange(int xleft, int xright, int y)
+        protected void CheckRange(int xleft, int xright, int y, int z)
         {
             for (int i = xleft; i <= xright; )
             {
-                if ((!flagsMap.GetFlagOn(i, y)) && IncludePredicate(i, y))
+                if ((!flagsMap.GetFlagOn(i, y, z)) && IncludePredicate(i, y, z))
                 {
                     int rb = i + 1;
-                    while (rb <= xright && (!flagsMap.GetFlagOn(rb, y)) && IncludePredicate(rb, y))
+                    while (rb <= xright && (!flagsMap.GetFlagOn(rb, y, z)) && IncludePredicate(rb, y, z))
                     {
                         rb++;
                     }
                     rb--;
-                    Int16Double t = new Int16Double(rb, y);
-                    flagsMap.SetFlagOn(rb, y, true);
+                    Int16Triple t = new Int16Triple(rb, y, z);
+                    flagsMap.SetFlagOn(rb, y, z, true);
                     container.Push(t);
                     Process(t);
                     i = rb + 1;
@@ -54,22 +58,22 @@ namespace SeededGrow2d
                 }
             }
         }//CheckRange操作
-        protected int FindXLeft(Int16Double p)
+        protected int FindXLeft(Int16Triple p)
         {
             int xleft = p.X - 1;
             while (true)
             {
-                if (xleft == -1 || flagsMap.GetFlagOn(xleft, p.Y))
+                if (xleft == -1 || flagsMap.GetFlagOn(xleft, p.Y, p.Z))
                 {
                     break;
                 }
                 else
                 {
-                    byte value = bmp.GetPixel(xleft, p.Y);
-                    if (IncludePredicate(xleft, p.Y))
+                    byte value = bmp.GetPixel(xleft, p.Y, p.Z);
+                    if (IncludePredicate(xleft, p.Y, p.Z))
                     {
-                        Int16Double t = new Int16Double(xleft, p.Y);
-                        flagsMap.SetFlagOn(xleft, p.Y, true);
+                        Int16Triple t = new Int16Triple(xleft, p.Y, p.Z);
+                        flagsMap.SetFlagOn(xleft, p.Y, p.Z, true);
                         Process(t);
                         xleft--;
                     }
@@ -81,22 +85,22 @@ namespace SeededGrow2d
             }
             return xleft + 1;
         }//FindXLeft操作
-        protected int FindXRight(Int16Double p)
+        protected int FindXRight(Int16Triple p)
         {
             int xright = p.X + 1;
             while (true)
             {
-                if (xright == bmp.width || flagsMap.GetFlagOn(xright, p.Y))
+                if (xright == bmp.width || flagsMap.GetFlagOn(xright, p.Y, p.Z))
                 {
                     break;
                 }
                 else
                 {
-                    byte value = bmp.GetPixel(xright, p.Y);
-                    if (IncludePredicate(xright, p.Y))
+                    byte value = bmp.GetPixel(xright, p.Y, p.Z);
+                    if (IncludePredicate(xright, p.Y, p.Z))
                     {
-                        Int16Double t = new Int16Double(xright, p.Y);
-                        flagsMap.SetFlagOn(xright, p.Y, true);
+                        Int16Triple t = new Int16Triple(xright, p.Y, p.Z);
+                        flagsMap.SetFlagOn(xright, p.Y, p.Z, true);
                         Process(t);
                         xright++;
                     }
@@ -108,23 +112,26 @@ namespace SeededGrow2d
             }
             return xright - 1;
         }//FindXRight操作
-        protected bool IncludePredicate(int x, int y)
+        public byte min;
+        public byte max;
+        protected bool IncludePredicate(int x,int y,int z)
         {
-            return bmp.GetPixel(x, y) == BitMap2d.WHITE;
+            byte v = bmp.GetPixel(x, y,z);
+            return v > min && v < max;
         }
-        protected void Process(Int16Double p)
+        protected void Process(Int16Triple p)
         {
             count++;
         }
     }
-    class ScanlineFill2d_T : ScanlineFill2d
+    class ScanlineFill3d_T : ScanlineFill3d
     {
         public Stopwatch watch = new Stopwatch();
         public ResultReport report;
-        public  void ExcuteScanlineFill_Queue(BitMap2d data, Int16Double seed)
+        public void ExcuteScanlineFill_Queue(BitMap3d data, Int16Triple seed)
         {
             watch.Start();
-            container = new Container_Queue<Int16Double>();
+            container = new Container_Queue<Int16Triple>();
             base.ExcuteScanlineFill(data, seed);
             watch.Stop();
             report.time = watch.ElapsedMilliseconds;
@@ -138,10 +145,10 @@ namespace SeededGrow2d
             report.flag_set_count = flagsMap.action_set_count;
             return;
         }
-        public  void ExcuteScanlineFill_Stack(BitMap2d data, Int16Double seed)
+        public void ExcuteScanlineFill_Stack(BitMap3d data, Int16Triple seed)
         {
             watch.Start();
-            container = new Container_Stack<Int16Double>();
+            container = new Container_Stack<Int16Triple>();
             base.ExcuteScanlineFill(data, seed);
             watch.Stop();
             report.time = watch.ElapsedMilliseconds;

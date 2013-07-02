@@ -5,15 +5,15 @@ using System.Diagnostics;
 
 namespace SeededGrow2d
 {
-    public enum ParentDirections
+    enum ParentDirections
     {
         Y0 = 1, Y2 = 2, Non = 5
     }
-    public enum ExtendTypes
+    enum ExtendTypes
     {
         LeftRequired = 1, RightRequired = 2, AllRez = 3, UnRez = 4
     }
-    public struct Span
+    struct Span
     {
         public int XLeft;
         public int XRight;
@@ -21,18 +21,17 @@ namespace SeededGrow2d
         public ExtendTypes Extended;
         public ParentDirections ParentDirection;
     }
-    public class SpanFill2d
+    class SpanFill2d
     {
         protected int count = 0;
         protected BitMap2d bmp;
         public FlagMap2d flagsMap;
-        protected Container<Span> queue;
-        public virtual void ExcuteSpanFill_Q(BitMap2d data, Int16Double seed)
+        protected Container<Span> container;//以Span为单位的Queue或Stack容器
+        protected virtual void ExcuteSpanFill(BitMap2d data, Int16Double seed)
         {
             this.bmp = data;
             data.ResetVisitCount();
             flagsMap = new FlagMap2d(data.width, data.height);
-            queue = new Container_Queue<Span>();
             Process(seed);
             flagsMap.SetFlagOn(seed.X, seed.Y, true);
             Span seedspan = new Span();
@@ -41,11 +40,11 @@ namespace SeededGrow2d
             seedspan.Y = seed.Y;
             seedspan.ParentDirection = ParentDirections.Non;
             seedspan.Extended = ExtendTypes.UnRez;
-            queue.Push(seedspan);
+            container.Push(seedspan);
 
-            while (!queue.Empty())
+            while (!container.Empty())
             {
-                Span span = queue.Pop();
+                Span span = container.Pop();
                 #region AllRez
                 if (span.Extended == ExtendTypes.AllRez)
                 {
@@ -156,136 +155,7 @@ namespace SeededGrow2d
                 #endregion
             }
         }
-        public virtual void ExcuteSpanFill_S(BitMap2d data, Int16Double seed)
-        {
-            this.bmp = data;
-            data.ResetVisitCount();
-            flagsMap = new FlagMap2d(data.width, data.height);
-            queue = new Container_Stack<Span>();
-            Process(seed);
-            flagsMap.SetFlagOn(seed.X, seed.Y, true);
-            Span seedspan = new Span();
-            seedspan.XLeft = seed.X;
-            seedspan.XRight = seed.X;
-            seedspan.Y = seed.Y;
-            seedspan.ParentDirection = ParentDirections.Non;
-            seedspan.Extended = ExtendTypes.UnRez;
-            queue.Push(seedspan);
-
-            while (!queue.Empty())
-            {
-                Span span = queue.Pop();
-                #region AllRez
-                if (span.Extended == ExtendTypes.AllRez)
-                {
-                    if (span.ParentDirection == ParentDirections.Y2)
-                    {
-                        if (span.Y - 1 >= 0)
-                            CheckRange(span.XLeft, span.XRight, span.Y - 1, ParentDirections.Y2);
-                        continue;
-                    }
-                    if (span.ParentDirection == ParentDirections.Y0)
-                    {
-                        if (span.Y + 1 < bmp.height)
-                            CheckRange(span.XLeft, span.XRight, span.Y + 1, ParentDirections.Y0);
-                        continue;
-                    }
-                    throw new Exception();
-                }
-                #endregion
-                #region UnRez
-                if (span.Extended == ExtendTypes.UnRez)
-                {
-                    int xl = FindXLeft(span.XLeft, span.Y);
-                    int xr = FindXRight(span.XRight, span.Y);
-                    if (span.ParentDirection == ParentDirections.Y2)
-                    {
-                        if (span.Y - 1 >= 0)
-                            CheckRange(xl, xr, span.Y - 1, ParentDirections.Y2);
-                        if (span.Y + 1 < bmp.height)
-                        {
-                            if (xl != span.XLeft)
-                                CheckRange(xl, span.XLeft, span.Y + 1, ParentDirections.Y0);
-                            if (span.XRight != xr)
-                                CheckRange(span.XRight, xr, span.Y + 1, ParentDirections.Y0);
-                        }
-                        continue;
-                    }
-                    if (span.ParentDirection == ParentDirections.Y0)
-                    {
-                        if (span.Y + 1 < bmp.height)
-                            CheckRange(xl, xr, span.Y + 1, ParentDirections.Y0);
-                        if (span.Y - 1 >= 0)
-                        {
-                            if (xl != span.XLeft)
-                                CheckRange(xl, span.XLeft, span.Y - 1, ParentDirections.Y2);
-                            if (span.XRight != xr)
-                                CheckRange(span.XRight, xr, span.Y - 1, ParentDirections.Y2);
-                        }
-                        continue;
-                    }
-                    if (span.ParentDirection == ParentDirections.Non)
-                    {
-                        if (span.Y + 1 < bmp.height)
-                            CheckRange(xl, xr, span.Y + 1, ParentDirections.Y0);
-                        if (span.Y - 1 >= 0)
-                            CheckRange(xl, xr, span.Y - 1, ParentDirections.Y2);
-                        continue;
-                    }
-                    throw new Exception();
-                }
-                #endregion
-                #region LeftRequired
-                if (span.Extended == ExtendTypes.LeftRequired)
-                {
-                    int xl = FindXLeft(span.XLeft, span.Y);
-                    if (span.ParentDirection == ParentDirections.Y2)
-                    {
-                        if (span.Y - 1 >= 0)
-                            CheckRange(xl, span.XRight, span.Y - 1, ParentDirections.Y2);
-                        if (span.Y + 1 < bmp.height && xl != span.XLeft)
-                            CheckRange(xl, span.XLeft, span.Y + 1, ParentDirections.Y0);
-                        continue;
-                    }
-                    if (span.ParentDirection == ParentDirections.Y0)
-                    {
-                        if (span.Y + 1 < bmp.height)
-                            CheckRange(xl, span.XRight, span.Y + 1, ParentDirections.Y0);
-                        if (span.Y - 1 >= 0 && xl != span.XLeft)
-                            CheckRange(xl, span.XLeft, span.Y - 1, ParentDirections.Y2);
-                        continue;
-                    }
-                    throw new Exception();
-                }
-                #endregion
-                #region RightRequired
-                if (span.Extended == ExtendTypes.RightRequired)
-                {
-                    int xr = FindXRight(span.XRight, span.Y);
-
-                    if (span.ParentDirection == ParentDirections.Y2)
-                    {
-                        if (span.Y - 1 >= 0)
-                            CheckRange(span.XLeft, xr, span.Y - 1, ParentDirections.Y2);
-                        if (span.Y + 1 < bmp.height && span.XRight != xr)
-                            CheckRange(span.XRight, xr, span.Y + 1, ParentDirections.Y0);
-                        continue;
-                    }
-
-                    if (span.ParentDirection == ParentDirections.Y0)
-                    {
-                        if (span.Y + 1 < bmp.height)
-                            CheckRange(span.XLeft, xr, span.Y + 1, ParentDirections.Y0);
-                        if (span.Y - 1 >= 0 && span.XRight != xr)
-                            CheckRange(span.XRight, xr, span.Y - 1, ParentDirections.Y2);
-                        continue;
-                    }
-                    throw new Exception();
-                }
-                #endregion
-            }
-        }
-        private void CheckRange(int xleft, int xright, int y, ParentDirections ptype)
+        protected void CheckRange(int xleft, int xright, int y, ParentDirections ptype)
         {
             for (int i = xleft; i <= xright; )
             {
@@ -325,7 +195,7 @@ namespace SeededGrow2d
                         flagsMap.SetFlagOn(j, y, true);
                         Process(new Int16Double(j, y));
                     }
-                    queue.Push(span);
+                    container.Push(span);
 
                     i = rb + 1;
                 }
@@ -334,8 +204,8 @@ namespace SeededGrow2d
                     i++;
                 }
             }
-        }
-        private int FindXRight(int x, int y)
+        }//区段法的CheckRange 注意与扫描线的CheckRange的不同
+        protected int FindXRight(int x, int y)
         {
             int xright = x + 1;
             while (true)
@@ -361,7 +231,7 @@ namespace SeededGrow2d
             }
             return xright - 1;
         }
-        private int FindXLeft(int x, int y)
+        protected int FindXLeft(int x, int y)
         {
             int xleft = x - 1;
             while (true)
@@ -387,12 +257,12 @@ namespace SeededGrow2d
             }
             return xleft + 1;
         }
-        bool IncludePredicate(int x, int y)
+        protected bool IncludePredicate(int x, int y)
         {
             byte value = bmp.GetPixel(x, y);
             return value == 255;
         }
-        public void Process(Int16Double p)
+        protected void Process(Int16Double p)
         {
             count++;
         }
@@ -401,34 +271,36 @@ namespace SeededGrow2d
     {
         public Stopwatch watch = new Stopwatch();
         public ResultReport report;
-        public override void ExcuteSpanFill_Q(BitMap2d data, Int16Double seed)
+        public void ExcuteSpanFill_Queue(BitMap2d data, Int16Double seed)
         {
             watch.Start();
-            base.ExcuteSpanFill_Q(data, seed);
+            container = new Container_Queue<Span>();
+            base.ExcuteSpanFill(data, seed);
             watch.Stop();
             report.time = watch.ElapsedMilliseconds;
             report.result_point_count = count;
             report.bmp_get_count = data.action_get_count;
             report.bmp_set_count = data.action_set_count;
-            report.container_pop_count = queue.action_pop_count;
-            report.container_push_count = queue.action_push_count;
-            report.container_max_size = queue.max_contain_count;
+            report.container_pop_count = container.action_pop_count;
+            report.container_push_count = container.action_push_count;
+            report.container_max_size = container.max_contain_count;
             report.flag_get_count = flagsMap.action_get_count;
             report.flag_set_count = flagsMap.action_set_count;
             return;
         }
-        public override void ExcuteSpanFill_S(BitMap2d data, Int16Double seed)
+        public void ExcuteSpanFill_Stack(BitMap2d data, Int16Double seed)
         {
             watch.Start();
-            base.ExcuteSpanFill_S(data, seed);
+            container = new Container_Stack<Span>();
+            base.ExcuteSpanFill(data, seed);
             watch.Stop();
             report.time = watch.ElapsedMilliseconds;
             report.result_point_count = count;
             report.bmp_get_count = data.action_get_count;
             report.bmp_set_count = data.action_set_count;
-            report.container_pop_count = queue.action_pop_count;
-            report.container_push_count = queue.action_push_count;
-            report.container_max_size = queue.max_contain_count;
+            report.container_pop_count = container.action_pop_count;
+            report.container_push_count = container.action_push_count;
+            report.container_max_size = container.max_contain_count;
             report.flag_get_count = flagsMap.action_get_count;
             report.flag_set_count = flagsMap.action_set_count;
             return;
