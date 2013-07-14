@@ -25,7 +25,7 @@ namespace SeededGrow2d
             this.bmp = data;
             data.ResetVisitCount();
             flagsMap = new FlagMap2d(data.width, data.height);
-            Int16Double[] adjPoints4 = new Int16Double[6];
+            Int16Double[] adjPoints4 = new Int16Double[4];
             flagsMap.SetFlagOn(seed.X, seed.Y, true);
             container.Push(seed);
             Process(seed);

@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>d5c04b06-2e35-41a8-8b18-3e69b32be8d3</ProjectGuid>
+    <ProjectGuid>{83333800-3CC7-4E53-B789-BDEDAA8273A5}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SeededBlockFill3d</RootNamespace>
@@ -38,9 +38,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base.cs" />
+    <Compile Include="DataFiller.cs" />
+    <Compile Include="Block\FloodFill_Threshold.cs" />
+    <Compile Include="Block\LargeImage.cs" />
+    <Compile Include="Block\LargeSeededGrow.cs" />
+    <Compile Include="Layer\LargeImage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FFBase\SubSeededGrow.cs" />
+    <Compile Include="TestClass.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
