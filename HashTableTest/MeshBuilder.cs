@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HashTableTest
 {
-class MeshBuilder
+    class MeshBuilder
 {
     Mesh mesh;
     IHashTable<int> hashMap;

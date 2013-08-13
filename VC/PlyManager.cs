@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace HashTableTest
+namespace VC
 {
     public class PlyManager
     {
@@ -17,10 +17,6 @@ namespace HashTableTest
         private static void AWriteF(StreamWriter sw, int i1, int i2, int i3)
         {
             sw.Write(string.Format("{0} {1} {2} {3}\n", 3, i1, i2, i3));
-        }
-        private static void AWriteE(StreamWriter sw, int i1, int i2)
-        {
-            sw.Write(string.Format("{0} {1}\n", i1, i2));
         }
         public static void Output(Mesh mesh, string filePath)
         {

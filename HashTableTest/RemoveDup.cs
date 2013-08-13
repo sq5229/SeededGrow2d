@@ -25,7 +25,7 @@ public class QuickSorter<T> where T : IComparable<T>
             QuickSort(A, pa + 1, ed);
         }
     }
-    public static void Swap<T>(T[] A, int index1, int index2)
+    public static void Swap(T[] A, int index1, int index2)
     {
         T temp = A[index1];
         A[index1] = A[index2];
