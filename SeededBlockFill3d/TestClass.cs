@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SeededBlockFill3d.Layer;
+using System.Collections;
 
 namespace SeededBlockFill3d
 {
@@ -63,15 +65,75 @@ namespace SeededBlockFill3d
     }
     public class TestClass
     {
-        public static void Test()
+        public static List<Int16Triple> Test1(TestParms test)
         {
-            TestParms test = TestParms.CreateParmsForEngine();
-            LargeSeededGrow lsg = new LargeSeededGrow(test.image.width, test.image.height, test.image.depth);
-            lsg.SetBlockSize(50, 50, 50);
-            //BitMap3d bmp = test.image;
-            //LargeImage large = new LargeImage(bmp.width,bmp.height,bmp.depth);
-            //large.CreateBlocks(50, 50, 50);
+            LargeSeededGrowManager lsg = new LargeSeededGrowManager();
+            lsg.SetScale(test.image.width, test.image.height, test.image.depth,20);
+            DataFiller df = new DataFiller();
+            df.Initialize(test);
+            LargeFloodFill_Threshold ff = new LargeFloodFill_Threshold();
+            ff.SetThres(test.min, test.max);
+            lsg.SetExecutor(ff);
+            lsg.ExecuteSeededGrow(test.seed);
+            Console.WriteLine(lsg.resultSet.Count);
+            //IO.WriteXYZFile(lsg.resultSet, "Test1.xyz");
+            return lsg.resultSet;
+        }
+        public static List<Int16Triple> Test2(TestParms test)
+        {
+            
+            LargeFloodFill_Threshold ff = new LargeFloodFill_Threshold();
+            ff.SetThres(test.min, test.max);
+            ff.ExecuteSeededGrow(new SeededGrowInput(
+                test.image.data, test.image.width, test.image.height, test.image.depth,
+                new BitArray(test.image.width * test.image.height * test.image.depth, false), new List<Int16Triple>() { test.seed},false,false,true)
+                );
+            Console.WriteLine(ff.GetResult().Count);
+            //IO.WriteXYZFile(ff.GetResult(), "Test2.xyz");
+            return ff.GetResult();
+        }
 
+        internal static void Test()
+        {
+            TestParms test = TestParms.CreateParmsForBackPack();
+            List<Int16Triple> list2 = Test2(test);
+            List<Int16Triple> list1 = Test1(test);
+            //list2.Sort();
+            //list1.Sort();
+            //List<Int16Triple> ss = new List<Int16Triple>();
+            //int r1 = -1;
+
+            //for (int i = 0; i < list2.Count-1; i++)
+            //{
+            //    if (list2[i].CompareTo(list2[i + 1]) == 0)
+            //    {
+            //        throw new Exception();
+            //    }
+            //}
+            //for (int i = 0; i < list1.Count - 1; i++)
+            //{
+            //    if (list1[i].CompareTo(list1[i + 1]) == 0)
+            //    {
+            //        throw new Exception();
+            //    }
+            //}
+
+
+            //for (int i = 0; i < list2.Count; i++)
+            //{
+            //    if (list1[i].CompareTo(list2[i]) != 0)
+            //    {
+            //        if (r1 == -1)
+            //        {
+            //            r1 = i;
+            //        }
+            //    }
+            //}
+            //for (int i = r1; i < r1 + list1.Count - list2.Count;i++ )
+            //{
+            //    ss.Add(list1[i]);
+            //}
+            //IO.WriteXYZFile(ss, "left.xyz");
         }
     }
 }

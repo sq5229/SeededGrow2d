@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace SeededGrow3d.FloodFill
 {
-    class FloodFill3d
+    public class FloodFill3d
     {
         
         protected BitMap3d bmp;
@@ -19,7 +19,7 @@ namespace SeededGrow3d.FloodFill
             byte v = bmp.GetPixel(p.X, p.Y, p.Z);
             return v > min && v < max;
         }
-        protected void Process(Int16Triple p)
+        protected virtual void Process(Int16Triple p)
         {
             count++;
             return;
@@ -81,7 +81,7 @@ namespace SeededGrow3d.FloodFill
             adjPoints6[5].Z = p.Z+1;
         }
     }
-    class FloodFill3d_T : FloodFill3d
+    public class FloodFill3d_T : FloodFill3d
     {
         public Stopwatch watch = new Stopwatch();
         public ResultReport report;

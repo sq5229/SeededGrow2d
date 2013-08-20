@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{83333800-3CC7-4E53-B789-BDEDAA8273A5}</ProjectGuid>
+    <ProjectGuid>{F147B5FE-07E1-477B-A1A8-A50566D8D173}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SeededBlockFill3d</RootNamespace>
-    <AssemblyName>SeededBlockFill3d</AssemblyName>
+    <RootNamespace>BoundaryLine2d</RootNamespace>
+    <AssemblyName>BoundaryLine2d</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,24 +35,23 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base.cs" />
-    <Compile Include="DataFiller.cs" />
-    <Compile Include="Block\FloodFill_Threshold.cs" />
-    <Compile Include="Block\LargeImage.cs" />
-    <Compile Include="Block\LargeSeededGrow.cs" />
+    <Compile Include="BoundaryLineGenerator.cs" />
+    <Compile Include="FFTEST.cs" />
     <Compile Include="IO.cs" />
-    <Compile Include="Layer\LargeFloodFill_Threshold.cs" />
-    <Compile Include="Layer\LargeImage.cs" />
-    <Compile Include="Layer\LargeSeededGrowManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FFBase\SeededGrowBase.cs" />
-    <Compile Include="TestClass.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SeededGrow3d\SeededGrow3d.csproj">
+      <Project>{1AA9619A-C623-452D-B412-5B9291275932}</Project>
+      <Name>SeededGrow3d</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

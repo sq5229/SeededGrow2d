@@ -6,20 +6,20 @@ using System.Collections;
 
 namespace SeededBlockFill3d
 {
-    public static class DataFiller
+    public class DataFiller
     {
-        static byte[] allData;
-        static int width;
-        static int height;
-        static int depth;
-        public static void Initialize(TestParms test)
+        byte[] allData;
+        int width;
+        int height;
+        int depth;
+        public void Initialize(TestParms test)
         {
             allData = test.image.data;
             width = test.image.width;
             height = test.image.height;
             depth = test.image.depth;
         }
-        public static void LoadBlockData(byte[] target, int stx, int sty, int stz, int edx, int edy, int edz)
+        public void LoadBlockData(byte[] target, int stx, int sty, int stz, int edx, int edy, int edz)
         {
             int subwidth = edx - stx + 1;
             int subheight = edy - sty + 1;
@@ -35,7 +35,7 @@ namespace SeededBlockFill3d
                 }
             }
         }
-        public static void LoadLayerData(byte[] target,int stz, int edz)
+        public void LoadLayerData(byte[] target,int stz, int edz)
         {
             int st=stz*width*height;
             int ed=edz*width*height+width*height-1;

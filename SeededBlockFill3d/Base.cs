@@ -6,7 +6,7 @@ using System.IO;
 
 namespace SeededBlockFill3d
 {
-    public struct Int16Triple
+    public struct Int16Triple:IComparable<Int16Triple>
     {
         public int X;
         public int Y;
@@ -16,6 +16,21 @@ namespace SeededBlockFill3d
             X = x;
             Y = y;
             Z = z;
+        }
+        public override string ToString()
+        {
+            return string.Format("[{0},{1},{2}]",X,Y,Z);
+        }
+
+        public int CompareTo(Int16Triple other)
+        {
+            if(this.X!=other.X)
+                 return this.X.CompareTo(other.X);
+            if (this.Y != other.Y)
+                return this.Y.CompareTo(other.Y);
+            if (this.Z != other.Z)
+                return this.Z.CompareTo(other.Z);
+            return 0;
         }
     }
 
@@ -138,6 +153,10 @@ namespace SeededBlockFill3d
         {
             return false;
         }
+        public virtual void Clear()
+        {
+
+        }
     }
 
     public class Container_Queue<T> : Container<T>
@@ -164,6 +183,10 @@ namespace SeededBlockFill3d
         {
             return queue.Count == 0;
         }
+        public override void Clear()
+        {
+            queue.Clear();
+        }
     }
 
     public class Container_Stack<T> : Container<T>
@@ -189,6 +212,10 @@ namespace SeededBlockFill3d
         public override bool Empty()
         {
             return stack.Count == 0;
+        }
+        public override void Clear()
+        {
+            stack.Clear();
         }
     }
 

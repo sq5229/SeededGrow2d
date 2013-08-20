@@ -15,7 +15,9 @@ namespace SeededBlockFill3d.Layer
         public int subDepth;
         public BitArray Flag;
         public int indexZ;
+        public int AllLayerCount;
         public int actualDepth { get { return edz - stz + 1; } }
+        public int visitcount;
         public Layer(int allwidth, int allheight, int alldepth,int subDepth,int stz, int edz)
         {
             this.AllWidth = allwidth;
@@ -26,12 +28,13 @@ namespace SeededBlockFill3d.Layer
             this.edz = edz;
             Flag = null;
             indexZ = -1;
+            visitcount = 0;
         }
-        public Int16Triple ConvertToBlockCoord(Int16Triple globalCoord)
+        public Int16Triple ConvertGlobalCoodToLayerCoold(Int16Triple globalCoord)
         {
             return new Int16Triple(globalCoord.X, globalCoord.Y, globalCoord.Z - stz);
         }
-        public void ConvertCoords(List<Int16Triple> adjSeedList)
+        public void ConvertGlobalCoordsToLayerCoords(List<Int16Triple> adjSeedList)
         {
             for (int i = 0; i < adjSeedList.Count; i++)
             {
@@ -40,9 +43,24 @@ namespace SeededBlockFill3d.Layer
                 adjSeedList[i] = old;
             }
         }
-        public void InitFlag()
+        public void ConvertLayerCoordsToGlobalCoords(List<Int16Triple> adjSeedList)
         {
-            Flag = new BitArray(AllWidth * AllHeight * actualDepth);
+            for (int i = 0; i < adjSeedList.Count; i++)
+            {
+                Int16Triple old = adjSeedList[i];
+                old.Z += stz;
+                adjSeedList[i] = old;
+            }
+        }
+        public BitArray GetAndInitFlag()
+        {
+            if (Flag != null)
+                return Flag;
+            else
+            {
+                Flag = new BitArray(AllWidth * AllHeight * actualDepth);
+                return Flag;
+            }
         }
         public override string ToString()
         {
@@ -74,10 +92,21 @@ namespace SeededBlockFill3d.Layer
             adjPoints6[5].Y = p.Y;
             adjPoints6[5].Z = p.Z - 1;
         }
-
         public bool HasPoint(Int16Triple seed)
         {
             return seed.X >= 0 && seed.X <= AllWidth-1 && seed.Y >= 0 && seed.Y <= AllHeight-1 && seed.Z >= stz && seed.Z <= edz;
+        }
+        public bool HasLowerLayer()
+        {
+            return this.indexZ > 0;
+        }
+        public bool HasUpperLayer()
+        {
+            return this.indexZ < AllLayerCount - 1;
+        }
+        public void Clear()
+        {
+            Flag = null;
         }
     }
     public class LargeImage
@@ -91,6 +120,22 @@ namespace SeededBlockFill3d.Layer
         public int GetLayerCount()
         {
             return layerCount;
+        }
+        public int GetLayerDepth()
+        {
+            return subDepth;
+        }
+        public int GetWidth()
+        {
+            return width;
+        }
+        public int GetHeight()
+        {
+            return height;
+        }
+        public int GetDepth()
+        {
+            return depth;
         }
         public LargeImage(int width, int height, int depth)
         {
@@ -110,13 +155,28 @@ namespace SeededBlockFill3d.Layer
                 Layer b = new Layer(width, height, depth, subDepth, k * subDepth,(k + 1) * subDepth - 1);
                 layers[k] = b;
                 layers[k].indexZ = k;
+                layers[k].AllLayerCount = layerCount;
                 if (layers[k].edz > depth - 1)
                    layers[k].edz = depth - 1;
             }
         }
-        public Layer GetBlock(int k)
+        public Layer GetLayer(int k)
         {
+            if (k < 0 || k >= GetLayerCount())
+                return null;
             return layers[k];
+        }
+        public int GetLayerIndex(Int16Triple innerPoint)
+        {
+            for (int k = 0; k < layerCount; k++)
+            {
+                Layer b = this.GetLayer(k);
+                if (b.HasPoint(innerPoint))
+                {
+                    return k;
+                }
+            }
+            throw new Exception();
         }
     }
 }
