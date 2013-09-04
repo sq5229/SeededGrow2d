@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SeededBlockFill3d.Layer
+namespace SeededBlockFill3d
 {
-    class LargeFloodFill_Threshold : SeededGrowBase
+    class LargeFloodFill_Threshold : FloodFillBase
     {
         public void SetThres(byte min, byte max)
         {
@@ -13,14 +13,18 @@ namespace SeededBlockFill3d.Layer
         }
         byte min;
         byte max;
-        public override bool IncludeConditionMeets(Int16Triple t)
+        protected override bool IncludeConditionMeets(Int16Triple t)
         {
             byte v = data[t.X + t.Y * width + t.Z * width * height];
             return v<=max&&v>=min;
         }
-        public List<Int16Triple> GetResult()
+        //public List<Int16Triple> GetResult()
+        //{
+        //    return result;
+        //}
+        public int GetResult()
         {
-            return result;
+            return resultCount;
         }
     }
 }

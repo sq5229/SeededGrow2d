@@ -58,7 +58,7 @@ class SMCProcessor
     }
     public virtual bool IsInside(int x, int y, int z)
     {
-        if (x <= 0 || y <= 0 || z <= 0 || x > bmp.width || y > bmp.height || z > bmp.depth)
+        if (x <=0 || y <=0 || z <=0 || x > bmp.width || y > bmp.height || z > bmp.depth)
             return false;
         else
         {

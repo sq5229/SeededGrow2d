@@ -64,7 +64,7 @@ namespace SeededGrow3d.SpanFill
                     {
                         if (span.Y + 1 < bmp.height)//[spx-spy,y+1,z]
                             CheckRange(span.XLeft, span.XRight, span.Y + 1, span.Z, ParentDirections.Y0);
-                        if (span.Z - 1 > 0)//[spx-spy,y,z-1]
+                        if (span.Z - 1 >=0)//[spx-spy,y,z-1]
                             CheckRange(span.XLeft, span.XRight, span.Y, span.Z - 1, ParentDirections.Z2);
                         if (span.Z + 1 < data.depth)//[spx-spy,y,z+1]
                             CheckRange(span.XLeft, span.XRight, span.Y, span.Z + 1, ParentDirections.Z0);

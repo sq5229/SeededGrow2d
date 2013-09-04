@@ -55,6 +55,14 @@ namespace SeededBlockFill3d
             for (int i = 0; i < width * height * depth; i++)
                 data[i] = v;
         }
+        public BitMap3d(int width, int height, int depth)
+        {
+            this.width = width;
+            this.height = height;
+            this.depth = depth;
+            action_set_count = 0;
+            action_get_count = 0;
+        }
         public BitMap3d(byte[] data, int width, int height, int depth)
         {
             this.data = data;
@@ -79,6 +87,8 @@ namespace SeededBlockFill3d
         }
         public void ReadRaw(string path)
         {
+            if (data == null)
+                data = new byte[width * height * depth];
             FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
             fs.Read(data, 0, width * height * depth);
             fs.Close();
@@ -107,6 +117,15 @@ namespace SeededBlockFill3d
             action_get_count = 0;
             action_set_count = 0;
             flags = new BitArray(width * height * depth, false);
+        }
+        public FlagMap3d(BitArray array,int width, int height, int depth)
+        {
+            this.width = width;
+            this.height = height;
+            this.depth = depth;
+            action_get_count = 0;
+            action_set_count = 0;
+            flags = array;
         }
         public void SetFlagOn(int x, int y, int z, bool v)
         {

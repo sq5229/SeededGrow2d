@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SMC
+namespace HashTableTest
 {
-    public class HashTable_Double2dArray<T> 
+    public class HashTable_Triple2dArray<T> : IHashTable<T>
     {
-
         struct IndexAndValue<T1>
         {
             public int Index;
@@ -19,17 +18,19 @@ namespace SMC
         }
         List<IndexAndValue<T>>[,] mapHashXY;
         List<IndexAndValue<T>>[,] mapHashXZ;
+        List<IndexAndValue<T>>[,] mapHashYZ;
         int width;
         int height;
         int depth;
         int Count;
-        public HashTable_Double2dArray(int width, int height, int depth)
+        public HashTable_Triple2dArray(int width, int height, int depth)
         {
             this.width = width;
             this.height = height;
             this.depth = depth;
             mapHashXY = new List<IndexAndValue<T>>[this.width, this.height];
             mapHashXZ = new List<IndexAndValue<T>>[this.width, this.depth];
+            mapHashYZ = new List<IndexAndValue<T>>[this.height, this.depth];
         }
         static int FindK(List<IndexAndValue<T>> list, int index)
         {
@@ -58,14 +59,32 @@ namespace SMC
                 }
                 else
                 {
-                    if (mapHashXY[x, y].Count > mapHashXZ[x, z].Count)
+                    if (mapHashYZ[y, z] == null)
                     {
-                        mapHashXZ[x, z].Add(new IndexAndValue<T>(y, value));
+                        mapHashYZ[y, z] = new List<IndexAndValue<T>>();
+                        mapHashYZ[y, z].Add(new IndexAndValue<T>(x,value));
                         Count++;
                     }
                     else
                     {
-                        mapHashXY[x, y].Add(new IndexAndValue<T>(z, value));
+                        List<IndexAndValue<T>> list = null;
+                        IndexAndValue<T> ele = new IndexAndValue<T>(-1, value);
+                        if (mapHashXY[x, y].Count < mapHashXZ[x, z].Count)
+                        {
+                            list = mapHashXY[x, y];
+                            ele.Index = z;
+                        }
+                        else
+                        {
+                            list = mapHashXZ[x, z];
+                            ele.Index = y;
+                        }
+                        if (mapHashYZ[y, z].Count < list.Count)
+                        {
+                            list = mapHashYZ[y, z];
+                            ele.Index = x;
+                        }
+                        list.Add(ele);
                         Count++;
                     }
                 }
@@ -82,7 +101,23 @@ namespace SMC
                     {
                         int index2 = FindK(mapHashXZ[x, z], y);
                         if (index2 == -1)
-                            return false;
+                        {
+                            if (mapHashYZ[y, z] != null)
+                            {
+                                int index3 = FindK(mapHashYZ[y, z], x);
+                                if(index3==-1)
+                                    return false;
+                                else
+                                {
+                                    value = mapHashYZ[y, z][index3].Value;
+                                    return true;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
                         else
                         {
                             value = mapHashXZ[x, z][index2].Value;

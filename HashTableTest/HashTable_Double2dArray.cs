@@ -107,7 +107,6 @@ public class HashTable_Double2dArray<T>:IHashTable<T>
         return;
     }
 
-
     public void Clear()
     {
         return;

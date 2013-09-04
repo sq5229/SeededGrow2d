@@ -2,11 +2,24 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SMC
+namespace SeededGrowSMC
 {
+    public struct Int16TripleWithTValue<T2>
+    {
+        public int X;
+        public int Y;
+        public int Z;
+        public T2 V;
+        public Int16TripleWithTValue(int x, int y, int z, T2 v)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+            this.V = v;
+        }
+    }
     public class HashTable_Double2dArray<T> 
     {
-
         struct IndexAndValue<T1>
         {
             public int Index;
@@ -42,6 +55,8 @@ namespace SMC
         }
         public void SetHashValue(int x, int y, int z, T value)
         {
+            //if (x < 0 || y < 0 || z < 0)
+            //    return;
             if (mapHashXY[x, y] == null)
             {
                 mapHashXY[x, y] = new List<IndexAndValue<T>>();
@@ -73,6 +88,8 @@ namespace SMC
         }
         public bool GetHashValue(int x, int y, int z, ref T value)
         {
+            //if (x < 0 || y < 0 || z < 0)
+            //    return false;
             if (mapHashXY[x, y] != null)
             {
                 int index = FindK(mapHashXY[x, y], z);
@@ -107,8 +124,41 @@ namespace SMC
         {
             return;
         }
-
-
+        public List<Int16TripleWithTValue<T>> GetAllKeyValues()
+        {
+            List<Int16TripleWithTValue<T>> list = new List<Int16TripleWithTValue<T>>();
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    if (mapHashXY[i, j] != null)
+                    {
+                        for (int k = 0; k < mapHashXY[i, j].Count; k++)
+                        {
+                            list.Add(new Int16TripleWithTValue<T>(i, j, mapHashXY[i, j][k].Index, mapHashXY[i, j][k].Value));
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < width; i++)
+            {
+                for (int k = 0; k < depth; k++)
+                {
+                    if (mapHashXZ[i, k] != null)
+                    {
+                        for (int j = 0; j < mapHashXZ[i, k].Count; j++)
+                        {
+                            list.Add(new Int16TripleWithTValue<T>(i,mapHashXZ[i, k][j].Index,k , mapHashXZ[i, k][j].Value));
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+        public int GetCount()
+        {
+            return Count;
+        }
         public void Clear()
         {
             return;
