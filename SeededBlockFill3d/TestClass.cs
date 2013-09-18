@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using SeededBlockFill3d.Layer;
 using System.Collections;
+using SeededBlockFill3d.Layer.FF.ConcreteFills;
+using SeededBlockFill3d.Layer.FF;
 
 namespace SeededBlockFill3d
 {
@@ -61,7 +63,7 @@ namespace SeededBlockFill3d
         public static TestParms CreateParmsForCube()
         {
             TestParms parm = new TestParms();
-            parm.image = new BitMap3d(200, 200, 200, 240);
+            parm.image = new BitMap3d(100, 100, 100, 240);
             parm.seed = new Int16Triple(50, 50, 50);
             parm.min = 0;
             parm.max = 255;
@@ -76,39 +78,39 @@ namespace SeededBlockFill3d
     }
     public class TestClass
     {
+        #region Layer
         public static void TestLayerFloodFill(TestParms test)
         {
             DataFiller_Simulation df = new DataFiller_Simulation();
             df.Initialize(test);
-            LargeSeededGrowManager_FloodFill lsg = new LargeSeededGrowManager_FloodFill();
-            lsg.SetScale(test.image.width, test.image.height, test.image.depth,20);
-            LargeFloodFill_Threshold ff = new LargeFloodFill_Threshold();
+            L_LargeSeededGrowManager_FloodFill lsg = new L_LargeSeededGrowManager_FloodFill();
+            lsg.SetScale(test.image.width, test.image.height, test.image.depth, 20);
+            L_LargeFloodFill_Threshold ff = new L_LargeFloodFill_Threshold();
             ff.SetThres(test.min, test.max);
             lsg.SetExecutor(ff);
             lsg.SetDataProvider(df);
             lsg.ExecuteSeededGrow(test.seed);
-            Console.WriteLine("Layer Based FloodFill Result Count :"+lsg.resultCount);
-            //df.Close();
+            Console.WriteLine("Layer Based FloodFill Result Count :" + lsg.resultCount);
         }
         public static void TestFloodFill(TestParms test)
         {
-            LargeFloodFill_Threshold ff = new LargeFloodFill_Threshold();
+            L_LargeFloodFill_Threshold ff = new L_LargeFloodFill_Threshold();
             test.LoadData();
             ff.SetThres(test.min, test.max);
             ff.ExecuteSeededGrow(new FloodFillInput(
                 test.image.data, test.image.width, test.image.height, test.image.depth,
-                new FlagMap3d(test.image.width,test.image.height,test.image.depth), new List<Int16Triple>() { test.seed},false,false,true)
+                new FlagMap3d(test.image.width, test.image.height, test.image.depth), new List<Int16Triple>() { test.seed }, false, false, true)
                 );
             Console.WriteLine("FloodFill Result Count :" + ff.GetResult());
-            return ;
+            return;
         }
         public static void TestLayerSpanFill(TestParms test)
         {
             DataFiller df = new DataFiller_Simulation();
             df.Initialize(test);
-            LargeSeededGrowManager_SpanFill lsg = new LargeSeededGrowManager_SpanFill();
+            L_LargeSeededGrowManager_SpanFill lsg = new L_LargeSeededGrowManager_SpanFill();
             lsg.SetScale(test.image.width, test.image.height, test.image.depth, 20);
-            LargeSpanFill_Threshold ff = new LargeSpanFill_Threshold();
+            L_LargeSpanFill_Threshold ff = new L_LargeSpanFill_Threshold();
             ff.SetThres(test.min, test.max);
             lsg.SetExecutor(ff);
             lsg.SetDataProvider(df);
@@ -121,29 +123,37 @@ namespace SeededBlockFill3d
         public static void TestSpanFill(TestParms test)
         {
             test.LoadData();
-            LargeSpanFill_Threshold ff = new LargeSpanFill_Threshold();
+            L_LargeSpanFill_Threshold ff = new L_LargeSpanFill_Threshold();
             ff.SetThres(test.min, test.max);
             ff.ExecuteSeededGrow(new SpanFillInput(
                 test.image.data, test.image.width, test.image.height, test.image.depth,
-                new FlagMap3d(test.image.width, test.image.height ,test.image.depth), new List<Range>(),test.seed, false, false, true)
+                new FlagMap3d(test.image.width, test.image.height, test.image.depth), new List<Range>(), test.seed, false, false, true)
                 );
             Console.WriteLine("SpanFill Result Count :" + ff.GetResult());
         }
+        #endregion
+        #region Block
+        static void TestBlockFloodFill(TestParms test)
+        {
+            DataFiller_Simulation df = new DataFiller_Simulation();
+            df.Initialize(test);
+            Block.B_LargeSeededGrowManager_FloodFill lsg = new Block.B_LargeSeededGrowManager_FloodFill();
+            lsg.SetScale(test.image.width, test.image.height, test.image.depth,10,10,10);
+            Block.FF.ConcreteFills.B_LargeFloodFill_Threshold ff = new Block.FF.ConcreteFills.B_LargeFloodFill_Threshold();
+            ff.SetThres(test.min, test.max);
+            lsg.SetExecutor(ff);
+            lsg.SetDataProvider(df);
+            lsg.ExecuteSeededGrow(test.seed);
+            Console.WriteLine("Block Based FloodFill Result Count :" + lsg.GetResult().Count);
+            IO.WriteXYZFile(lsg.GetResult().resultSet, "test.xyz");
+        }
+        #endregion
         internal static void Test()
         {
-
             TestParms test = TestParms.CreateParmsForLobster();
-            Console.WriteLine("Test Lobster data:");
-            TestLayerFloodFill(test);
             TestFloodFill(test);
-            TestLayerSpanFill(test);
-            TestSpanFill(test);
-            Console.WriteLine("\nTest Engine data:");
-            test = TestParms.CreateParmsForEngine();
-            TestLayerFloodFill(test);
-            TestFloodFill(test);
-            TestLayerSpanFill(test);
-            TestSpanFill(test);
+            TestBlockFloodFill(test);
+
         }
     }
 }

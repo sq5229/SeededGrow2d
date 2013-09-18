@@ -44,5 +44,28 @@ namespace SMC
             fs.Read(data, 0, width * height * depth);
             fs.Close();
         }
+        public static BitMap3d CreateSampleTedVolume(int width)
+        {
+            BitMap3d image = new BitMap3d(width, width, width, BitMap3d.BLACK);
+            byte[] data = image.data;
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    for (int k = 0; k < width; k++)
+                    {
+                        if (i + j + k <= width - 2 && i >= 3 && j >= 3 && k >= 3)
+                        {
+                            data[i * width * width + j * width + k] = BitMap3d.WHITE;
+                        }
+                        else
+                        {
+                            data[i * width * width + j * width + k] = BitMap3d.BLACK;
+                        }
+                    }
+                }
+            }
+            return image;
+        }
     }
 }

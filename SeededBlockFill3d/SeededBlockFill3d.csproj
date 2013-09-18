@@ -40,15 +40,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base.cs" />
+    <Compile Include="Block\FF\ConcreteFills\B_LargeFloodFill_Threshold.cs" />
+    <Compile Include="Block\FF\B_FloodFillBase.cs" />
+    <Compile Include="Block\SP\B_SpanFillBase.cs" />
+    <Compile Include="Block\B_LargeImage.cs" />
+    <Compile Include="Block\FF\B_LargeSeededGrowManager_FloodFill.cs" />
     <Compile Include="DataFiller.cs" />
-    <Compile Include="FF\ConcreteFills\LargeSpanFill_Threshold.cs" />
-    <Compile Include="FF\FloodFillBase.cs" />
-    <Compile Include="FF\SpanFillBase.cs" />
+    <Compile Include="Layer\FF\ConcreteFills\L_LargeSpanFill_Threshold.cs" />
+    <Compile Include="Layer\FF\L_FloodFillBase.cs" />
+    <Compile Include="Layer\FF\L_SpanFillBase.cs" />
     <Compile Include="IO.cs" />
-    <Compile Include="FF\ConcreteFills\LargeFloodFill_Threshold.cs" />
-    <Compile Include="Layer\LargeImage.cs" />
-    <Compile Include="Layer\LargeSeededGrowManager_FloodFill.cs" />
-    <Compile Include="Layer\LargeSeededGrowManager_SpanFill.cs" />
+    <Compile Include="Layer\FF\ConcreteFills\L_LargeFloodFill_Threshold.cs" />
+    <Compile Include="Layer\L_LargeImage.cs" />
+    <Compile Include="Layer\L_LargeSeededGrowManager_FloodFill.cs" />
+    <Compile Include="Layer\L_LargeSeededGrowManager_SpanFill.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestClass.cs" />
@@ -56,6 +61,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

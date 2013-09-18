@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SeededBlockFill3d.Layer.FF;
 
 namespace SeededBlockFill3d.Layer
 {
-class LargeSeededGrowManager_SpanFill
+class L_LargeSeededGrowManager_SpanFill
 {
     #region Static
     struct LayerDataAndInput
@@ -19,20 +20,20 @@ class LargeSeededGrowManager_SpanFill
         }
     }
     #endregion
-    LargeImage image;
+    L_LargeImage image;
     Container_Stack<LayerDataAndInput> queue;
     byte[] buffer;
-    SpanFillBase seedGrowExecutor;
+    L_SpanFillBase seedGrowExecutor;
     DataFiller dataProvider;
     //public List<Int16Triple> resultSet=new List<Int16Triple>();
     public int resultCount = 0;
-    public LargeSeededGrowManager_SpanFill()
+    public L_LargeSeededGrowManager_SpanFill()
     {
            
     }
     public void SetScale(int width, int height, int depth,int subDepth)
     {
-        this.image = new LargeImage(width, height, depth);
+        this.image = new L_LargeImage(width, height, depth);
         SetLayerSize(subDepth);
     }
     private void SetLayerSize(int subdepth)
@@ -40,7 +41,7 @@ class LargeSeededGrowManager_SpanFill
         image.CreateLayers(subdepth);
         buffer = new byte[image.GetWidth() * image.GetHeight() * subdepth];
     }
-    public void SetExecutor(SpanFillBase grower)
+    public void SetExecutor(L_SpanFillBase grower)
     {
         this.seedGrowExecutor = grower;
     }

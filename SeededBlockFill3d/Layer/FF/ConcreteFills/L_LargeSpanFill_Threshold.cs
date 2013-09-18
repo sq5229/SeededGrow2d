@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SeededBlockFill3d
+namespace SeededBlockFill3d.Layer.FF.ConcreteFills
 {
-    class LargeSpanFill_Threshold:SpanFillBase
+    class L_LargeSpanFill_Threshold:L_SpanFillBase
     {
         public void SetThres(byte min, byte max)
         {

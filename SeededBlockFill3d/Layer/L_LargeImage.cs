@@ -58,7 +58,7 @@ public class Layer
         return this.indexZ < AllLayerCount - 1;
     }//检测自己下面是不是还有一层
 }
-public class LargeImage
+public class L_LargeImage
 {
     int width;
     int height;
@@ -86,7 +86,7 @@ public class LargeImage
     {
         return depth;
     }
-    public LargeImage(int width, int height, int depth)
+    public L_LargeImage(int width, int height, int depth)
     {
         this.width = width;
         this.height = height;

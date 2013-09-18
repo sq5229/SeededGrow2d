@@ -11,7 +11,11 @@ namespace SMC
     {
         static void Main(string[] args)
         {
-            TestSMC();
+            //TestSMC();
+            BitMap3d bmp = BitMap3d.CreateSampleTedVolume(100);
+            SMCProcessor smc = new SMCProcessor(bmp);
+            Mesh m = smc.GeneratorSurface();
+            PlyManager.Output(m, @"D:\VTKproj\ted.ply");
             Console.ReadLine();
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
-namespace SeededBlockFill3d
+namespace SeededBlockFill3d.Layer.FF
 {
 public struct FloodFillResult
 {
@@ -73,7 +73,7 @@ public struct FloodFillInput
         overstepList = null;
     }
 }//存储输入参数
-public class FloodFillBase
+public class L_FloodFillBase
 {
     protected int width;
     protected int height;
@@ -83,7 +83,7 @@ public class FloodFillBase
     protected Container_Queue<Int16Triple> queue;
     //protected List<Int16Triple> result = new List<Int16Triple>();
     protected int resultCount = 0;
-    public FloodFillBase()
+    public L_FloodFillBase()
     {
         queue = new Container_Queue<Int16Triple>();
     }

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SeededBlockFill3d
+namespace SeededBlockFill3d.Layer.FF.ConcreteFills
 {
-    class LargeFloodFill_Threshold : FloodFillBase
+    class L_LargeFloodFill_Threshold : L_FloodFillBase
     {
         public void SetThres(byte min, byte max)
         {

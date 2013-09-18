@@ -137,7 +137,10 @@ namespace SeededBlockFill3d
             action_get_count++;
             return flags[x + y * width + z * width * height];
         }
-
+        public void ClearMap()
+        {
+            flags.SetAll(false);
+        }
         public int GetCount()
         {
             int sum = 0;
