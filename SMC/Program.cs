@@ -12,11 +12,12 @@ namespace SMC
         static void Main(string[] args)
         {
             //TestSMC();
-            BitMap3d bmp = BitMap3d.CreateSampleTedVolume(100);
-            SMCProcessor smc = new SMCProcessor(bmp);
-            Mesh m = smc.GeneratorSurface();
-            PlyManager.Output(m, @"D:\VTKproj\ted.ply");
-            Console.ReadLine();
+            BitMap3d bmp = BitMap3d.CreateSampleForLobster();
+            AdSMCProcessor smc = new AdSMCProcessor(bmp);
+            Mesh m = smc.GenerateSurface();
+            PlyManager.Output(m, "A2.ply");
+            Console.WriteLine("cmp");
+            Console.Read();
         }
 
         private static void TestSMC()
@@ -35,7 +36,7 @@ namespace SMC
                 }
             }
             SMCProcessor smc = new SMCProcessor(bmp);
-            Mesh m = smc.GeneratorSurface();
+            Mesh m = smc.GenerateSurface();
             PlyManager.Output(m, @"D:\VTKproj\engine.ply");
         }
 

@@ -42,9 +42,11 @@
     <Compile Include="Base.cs" />
     <Compile Include="Block\FF\ConcreteFills\B_LargeFloodFill_Threshold.cs" />
     <Compile Include="Block\FF\B_FloodFillBase.cs" />
+    <Compile Include="Block\SP\B_LargeSeededGrowManager_SpanFill.cs" />
     <Compile Include="Block\SP\B_SpanFillBase.cs" />
     <Compile Include="Block\B_LargeImage.cs" />
     <Compile Include="Block\FF\B_LargeSeededGrowManager_FloodFill.cs" />
+    <Compile Include="Block\SP\ConcreteFills\B_LargeSpanFill_Threshold.cs" />
     <Compile Include="DataFiller.cs" />
     <Compile Include="Layer\FF\ConcreteFills\L_LargeSpanFill_Threshold.cs" />
     <Compile Include="Layer\FF\L_FloodFillBase.cs" />

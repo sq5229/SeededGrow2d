@@ -44,23 +44,139 @@ namespace SMC
             fs.Read(data, 0, width * height * depth);
             fs.Close();
         }
-        public static BitMap3d CreateSampleTedVolume(int width)
+        public static BitMap3d CreateSampleTedVolume(int is400_300_200_100)
         {
-            BitMap3d image = new BitMap3d(width, width, width, BitMap3d.BLACK);
+            BitMap3d image = new BitMap3d(is400_300_200_100, is400_300_200_100, is400_300_200_100, BitMap3d.BLACK);
+            image.ReadRaw(string.Format("D://VTKproj//Ted_{0}.raw", is400_300_200_100));
             byte[] data = image.data;
-            for (int i = 0; i < width; i++)
+            for (int i = 0; i < data.Length; i++)
             {
-                for (int j = 0; j < width; j++)
+                if (data[i] > 128)
+                    data[i] = BitMap3d.WHITE;
+                else
+                    data[i] = BitMap3d.BLACK;
+            }
+            return image;
+        }
+
+        public static BitMap3d CreateSampleForFan()
+        {
+            BitMap3d image = new BitMap3d(150, 150, 150, BitMap3d.BLACK);
+            image.ReadRaw("D://VTKproj//marschnerlobb15.raw");
+            byte[] data = image.data;
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] >= 89 && data[i] <= 255)
+                    data[i] = BitMap3d.BLACK;
+                else
+                    data[i] = BitMap3d.WHITE;
+            }
+            for (int k = 0; k < image.depth; k++)
+            {
+                for (int j = 0; j < image.height; j++)
                 {
-                    for (int k = 0; k < width; k++)
+                    for (int i = 0; i < image.width; i++)
                     {
-                        if (i + j + k <= width - 2 && i >= 3 && j >= 3 && k >= 3)
+                        int index = k * image.width * image.height + j * image.width + i;
+                        if (i == 0 || i == image.width - 1 || j == 0 || j == image.height - 1 || k == 0 || k == image.depth - 1)
                         {
-                            data[i * width * width + j * width + k] = BitMap3d.WHITE;
+                            data[index] = BitMap3d.BLACK;
                         }
-                        else
+                    }
+                }
+            }
+            return image;
+        }
+
+        public static BitMap3d CreateSampleEngineVolume(string x2)
+        {
+            BitMap3d image;
+            if (x2 == "")
+            {
+                image = new BitMap3d(256, 256, 128, BitMap3d.BLACK);
+                image.ReadRaw("D://VTKproj//engine.raw");
+            }
+            else
+            {
+                image = new BitMap3d(512, 512, 256, BitMap3d.BLACK);
+                image.ReadRaw("D://VTKproj//enginex2.raw");
+            }
+            byte[] data = image.data;
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] >= 64 && data[i] <= 255)
+                    data[i] = BitMap3d.WHITE;
+                else
+                    data[i] = BitMap3d.BLACK;
+            }
+            for (int k = 0; k < image.depth; k++)
+            {
+                for (int j = 0; j < image.height; j++)
+                {
+                    for (int i = 0; i < image.width; i++)
+                    {
+                        int index = k * image.width * image.height + j * image.width + i;
+                        if (i == 0 || i == image.width - 1 || j == 0 || j == image.height - 1 || k == 0 || k == image.depth - 1)
                         {
-                            data[i * width * width + j * width + k] = BitMap3d.BLACK;
+                            data[index] = BitMap3d.BLACK;
+                        }
+                    }
+                }
+            }
+            return image;
+        }
+
+        public static BitMap3d CreateSampleForLobster()
+        {
+            BitMap3d image = new BitMap3d(301, 324, 56, BitMap3d.BLACK);
+            image.ReadRaw("D://VTKproj//lobster.raw");
+            byte[] data = image.data;
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] >= 37 && data[i] <= 255)
+                    data[i] = BitMap3d.WHITE;
+                else
+                    data[i] = BitMap3d.BLACK;
+            }
+            for (int k = 0; k < image.depth; k++)
+            {
+                for (int j = 0; j < image.height; j++)
+                {
+                    for (int i = 0; i < image.width; i++)
+                    {
+                        int index = k * image.width * image.height + j * image.width + i;
+                        if (i == 0 || i == image.width - 1 || j == 0 || j == image.height - 1 || k == 0 || k == image.depth - 1)
+                        {
+                            data[index] = BitMap3d.BLACK;
+                        }
+                    }
+                }
+            }
+            return image;
+        }
+
+        public static BitMap3d CreateSampleForLobsterX2()
+        {
+            BitMap3d image = new BitMap3d(602, 648, 112, BitMap3d.BLACK);
+            image.ReadRaw("D://VTKproj//lobsterx2.raw");
+            byte[] data = image.data;
+            for (int i = 0; i < data.Length; i++)
+            {
+                if (data[i] >= 37 && data[i] <= 255)
+                    data[i] = BitMap3d.WHITE;
+                else
+                    data[i] = BitMap3d.BLACK;
+            }
+            for (int k = 0; k < image.depth; k++)
+            {
+                for (int j = 0; j < image.height; j++)
+                {
+                    for (int i = 0; i < image.width; i++)
+                    {
+                        int index = k * image.width * image.height + j * image.width + i;
+                        if (i == 0 || i == image.width - 1 || j == 0 || j == image.height - 1 || k == 0 || k == image.depth - 1)
+                        {
+                            data[index] = BitMap3d.BLACK;
                         }
                     }
                 }

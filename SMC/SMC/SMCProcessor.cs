@@ -39,7 +39,7 @@ class SMCProcessor
             }
         }
     }//extract triangles and put them into meshbuilder
-    public Mesh GeneratorSurface()
+    public Mesh GenerateSurface()
     {
         MeshBuilder_IntegerVertex builder = new MeshBuilder_IntegerVertex(bmp.width + 2, bmp.height + 2, bmp.depth + 2);// this class can build mesh from independent triangles
         for (int k = 0; k < bmp.depth - 1; k++)

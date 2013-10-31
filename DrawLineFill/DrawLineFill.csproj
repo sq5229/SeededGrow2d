@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{94EB6006-FA10-4CE1-A142-B9F0A734CE08}</ProjectGuid>
+    <ProjectGuid>{85A0BFDD-8696-40F4-B70C-31AD577DF938}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SMC</RootNamespace>
-    <AssemblyName>SMC</AssemblyName>
+    <RootNamespace>DrawLineFill</RootNamespace>
+    <AssemblyName>DrawLineFill</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -38,22 +38,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bitmap3d.cs" />
-    <Compile Include="Cube.cs" />
-    <Compile Include="HashTable.cs" />
-    <Compile Include="MC\MCProcessor.cs" />
-    <Compile Include="Mesh.cs" />
-    <Compile Include="MeshBuilder.cs" />
-    <Compile Include="PlyManager.cs" />
+    <Compile Include="Base.cs" />
+    <Compile Include="DrawLine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MC\MCTable.cs" />
-    <Compile Include="SMC\AdSMCProcessor.cs" />
-    <Compile Include="SMC\SMCProcessor.cs" />
-    <Compile Include="SMC\SMCTable.cs" />
-    <Compile Include="SMC\SMCTableGenerator.cs" />
+    <Compile Include="SurfaceTest.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

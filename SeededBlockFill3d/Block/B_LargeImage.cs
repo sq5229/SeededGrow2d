@@ -74,10 +74,10 @@ namespace SeededBlockFill3d.Block
         }
         public FlagMap3d GetFlagMap3d()
         {
-            //if (flagMap == null)
-            //    flagMap = new FlagMap3d(actualWidth, actualHeight, actualDepth);
-            //return flagMap;
-            return null;
+            if (flagMap == null)
+                flagMap = new FlagMap3d(actualWidth, actualHeight, actualDepth);
+            return flagMap;
+            //return null;
         }
         public bool HasPoint(Int16Triple seed)
         {

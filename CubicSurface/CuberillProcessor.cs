@@ -16,18 +16,6 @@ public struct Int16Triple
         Z = z;
     }
 }
-public struct FloatTriple
-{
-    public float X;
-    public float Y;
-    public float Z;
-    public FloatTriple(float x, float y, float z)
-    {
-        X = x;
-        Y = y;
-        Z = z;
-    }
-}
 public class CuberilleProcessor
 {
         public static Int16Triple[][] AdjIndexToVertexIndices = new Int16Triple[6][]

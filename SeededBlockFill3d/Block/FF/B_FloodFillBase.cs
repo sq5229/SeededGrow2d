@@ -29,28 +29,10 @@ namespace SeededBlockFill3d.Block.FF
             resultSet.Add(p);
             resultCount++;
         }
-        public void RemovePointer()
-        {
-            
-            for (int i = 0; i < 6; i++)
-            {
-                boundaryRequestPoints[i]=null;
-                boundaryRequestPoints[i] = new List<Int16Triple>();
-            }
-        }
         public void ClearResult()
         {
             resultCount = 0;
             resultSet.Clear();
-        }
-        public bool HasPoints()
-        {
-            for (int i = 0; i < 6; i++)
-            {
-                if (boundaryRequestPoints[i].Count > 0)
-                    return true;
-            }
-            return false;
         }
     }
     public class FloodFillInput
@@ -126,15 +108,6 @@ namespace SeededBlockFill3d.Block.FF
         {
             queue = new Container_Queue<Int16TripleWithDirection>();
         }
-        //public void LoadFlagsMap(FlagMap3d flags)
-        //{
-        //    if (flags != null)
-        //        flagsMap = flags;
-        //    else if (flagsMap == null)
-        //        this.flagsMap = new FlagMap3d(flags.width, flags.height, flags.depth);
-        //    else
-        //        flagsMap.ClearMap();
-        //}
         public void ExecuteSeededGrow(FloodFillInput input,FloodFillResult ret)
         {
             queue.Clear();

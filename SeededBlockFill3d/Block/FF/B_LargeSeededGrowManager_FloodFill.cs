@@ -4,20 +4,20 @@ using System.Text;
 using System.Collections;
 using SeededBlockFill3d.Block.FF;
 
-namespace SeededBlockFill3d.Block
+namespace SeededBlockFill3d.Block.FF
 {
-    public class LargeSeededGrowResult
+    public class LargeSpanFillResult
     {
         public int Count = 0;
         public List<Int16Triple> resultSet = new List<Int16Triple>();
 
     }
-    class BlockIR
+    class BlockIR_FF
     {
         public Int16Triple singleSeed;
         public List<Int16Triple>[] boundarySeedsInside;
         //public List<Int16Triple>[] boundaryOverstepOutside;
-        public BlockIR()
+        public BlockIR_FF()
         {
             boundarySeedsInside = new List<Int16Triple>[6];
             //boundaryOverstepOutside = new List<Int16Triple>[6];
@@ -45,8 +45,6 @@ namespace SeededBlockFill3d.Block
             }
         }
     }
-
-
     public class B_LargeSeededGrowManager_FloodFill
     {
         #region Static
@@ -66,13 +64,13 @@ namespace SeededBlockFill3d.Block
         byte[] buffer;
         B_FloodFillBase seedGrowExecutor;
         DataFiller dataProvider;
-        LargeSeededGrowResult resultSum;
-        BlockIR[, ,] blockIRMap;
+        LargeSpanFillResult resultSum;
+        BlockIR_FF[, ,] blockIRMap;
         public void SetScale(int width, int height, int depth, int subwidth, int subheight, int subdepth)
         {
             this.image = new B_LargeImage(width, height, depth);
             SetBlockSize(subwidth, subheight, subdepth);
-            blockIRMap = new BlockIR[image.GetBlocksCount().X, image.GetBlocksCount().Y, image.GetBlocksCount().Z];
+            blockIRMap = new BlockIR_FF[image.GetBlocksCount().X, image.GetBlocksCount().Y, image.GetBlocksCount().Z];
         }
 
         private void SetBlockSize(int subwidth, int subheight, int subdepth)
@@ -97,17 +95,17 @@ namespace SeededBlockFill3d.Block
                 throw new Exception();
             FloodFillInput input=new FloodFillInput();
             FloodFillResult ret = new FloodFillResult() ;
-            resultSum = new LargeSeededGrowResult();
+            resultSum = new LargeSpanFillResult();
             queue = new Container_Stack<Block>();
             Block firstB = GetFirstBlock(firstseed);
-            BlockIR firstBir = GetBlockIR(firstB.indexX, firstB.indexY, firstB.indexZ);
+            BlockIR_FF firstBir = GetBlockIR(firstB.indexX, firstB.indexY, firstB.indexZ);
             firstBir.singleSeed =ConvertGlobalCoodToBlockCoord(firstB,firstseed);
             queue.Push(firstB);
             while (!queue.Empty())
             {
                 Block block = queue.Pop();
                 block.VisitedCount++;
-                BlockIR bir = GetBlockIR(block.indexX, block.indexY, block.indexZ);
+                BlockIR_FF bir = GetBlockIR(block.indexX, block.indexY, block.indexZ);
                 FillBlockData(block);
 
                 MarshalInputAndOutput(input, ret,block, bir);
@@ -127,7 +125,7 @@ namespace SeededBlockFill3d.Block
                         if (t.VisitedCount < 1)
                         {
                             ConvertThisBlockCoordsToOtherBlockCoords(block, t, ret.boundaryRequestPoints[i]);
-                            BlockIR tbir = GetBlockIR(t.indexX, t.indexY, t.indexZ);
+                            BlockIR_FF tbir = GetBlockIR(t.indexX, t.indexY, t.indexZ);
                             List<Int16Triple> oppInput = tbir.boundarySeedsInside[OppositePos[i]];
                             if (oppInput != null && oppInput.Count != 0)
                             {
@@ -170,7 +168,7 @@ namespace SeededBlockFill3d.Block
             }
         }
 
-        private void MarshalInputAndOutput(FloodFillInput input,FloodFillResult ret, Block block, BlockIR bir)
+        private void MarshalInputAndOutput(FloodFillInput input,FloodFillResult ret, Block block, BlockIR_FF bir)
         {
             if (bir.GetIsFirst())
             {
@@ -198,18 +196,18 @@ namespace SeededBlockFill3d.Block
             }
         }
 
-        public void MergeResult(LargeSeededGrowResult lsg, FloodFillResult ret)
+        public void MergeResult(LargeSpanFillResult lsg, FloodFillResult ret)
         {
             lsg.resultSet.AddRange(ret.resultSet);
             lsg.Count += ret.resultCount;
         }
 
 
-        private BlockIR GetBlockIR(int x,int y,int z)
+        private BlockIR_FF GetBlockIR(int x,int y,int z)
         {
             if (blockIRMap[x, y, z] == null)
             {
-                blockIRMap[x, y, z] = new BlockIR();
+                blockIRMap[x, y, z] = new BlockIR_FF();
             }
             return blockIRMap[x, y, z];
         }
@@ -257,7 +255,7 @@ namespace SeededBlockFill3d.Block
             }
         }
 
-        public LargeSeededGrowResult GetResult()
+        public LargeSpanFillResult GetResult()
         {
             return resultSum;
         }
