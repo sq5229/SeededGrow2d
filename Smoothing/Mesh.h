@@ -49,6 +49,8 @@ long  Mesh::AddFace(Triangle& tri)
 	Faces.push_back(tri);
 	return index;
 }
+
+
 void Mesh::InitPerVertexVertexAdj()
 {
 	if(IsPerVertexVertexInfoEnabled)

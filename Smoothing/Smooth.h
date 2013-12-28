@@ -3,6 +3,8 @@
 #include "Base.h"
 #include "Mesh.h"
 #include <math.h>
+
+
 class Smoothing
 {
 private:
@@ -11,7 +13,6 @@ public:
 	Smoothing(Mesh* m)
 	{
 		this->mesh=m;
-		
 		m->InitPerVertexVertexAdj();
 	}
 	~Smoothing()
@@ -19,19 +20,16 @@ public:
 		this->mesh=NULL;
 	}
 public:
-	void Laplacian(int iterationTime)
+	void Laplacian()
 	{
 		Point3d* tempList=new Point3d[mesh->Vertices.size()];
-		for(int c=0;c<iterationTime;c++)
+		for(size_t i=0;i<mesh->Vertices.size();i++)
 		{
-			for(size_t i=0;i<mesh->Vertices.size();i++)
-			{
-				tempList[i]=GetSmoothedVertex_Laplacian(i);
-			}
-			for(size_t i=0;i<mesh->Vertices.size();i++)
-			{
-				mesh->Vertices[i]=tempList[i];
-			}
+			tempList[i]=GetSmoothedVertex_Laplacian(i);
+		}
+		for(size_t i=0;i<mesh->Vertices.size();i++)
+		{
+			mesh->Vertices[i]=tempList[i];
 		}
 		delete[] tempList;
 	}
@@ -58,7 +56,7 @@ public:
 		{
 			for(size_t i=0;i<mesh->Vertices.size();i++)
 			{
-				tempList[i]=GetSmoothedVertex_Taubin(i,lambda);
+				tempList[i]=GetSmoothedVertex_Taubin_Step(i,lambda);
 			}
 			for(size_t i=0;i<mesh->Vertices.size();i++)
 			{
@@ -66,7 +64,7 @@ public:
 			}
 			for(size_t i=0;i<mesh->Vertices.size();i++)
 			{
-				tempList[i]=GetSmoothedVertex_Taubin(i,mu);
+				tempList[i]=GetSmoothedVertex_Taubin_Step(i,mu);
 			}
 			for(size_t i=0;i<mesh->Vertices.size();i++)
 			{
@@ -218,27 +216,28 @@ private:
 		return mul/(mo1*mo2);
 	}
 
-	Point3d GetSmoothedVertex_Laplacian(size_t index)
+	Point3d GetSmoothedVertex_Laplacian(size_t index,float lambda=1.0f)
 	{
-		float dx=0,dy=0,dz=0;
+		float nx=0,ny=0,nz=0;
 		std::vector<long>& adjVertices=*(this->mesh->AdjInfos[index].VertexAdjacencyList);
 		if(adjVertices.size()==0)
 			return mesh->Vertices[index];
+		Point3d& P=mesh->Vertices[index];
 		for(size_t i=0;i<adjVertices.size();i++)
 		{
-			dx+=mesh->Vertices[adjVertices[i]].X-mesh->Vertices[index].X;
-			dy+=mesh->Vertices[adjVertices[i]].Y-mesh->Vertices[index].Y;
-			dz+=mesh->Vertices[adjVertices[i]].Z-mesh->Vertices[index].Z;
+			nx+=mesh->Vertices[adjVertices[i]].X;
+			ny+=mesh->Vertices[adjVertices[i]].Y;
+			nz+=mesh->Vertices[adjVertices[i]].Z;
 		}
-		dx/=adjVertices.size();
-		dy/=adjVertices.size();
-		dz/=adjVertices.size();
-		float newx=dx+mesh->Vertices[index].X;
-		float newy=dy+mesh->Vertices[index].Y;
-		float newz=dz+mesh->Vertices[index].Z;
+		nx/=adjVertices.size();
+		ny/=adjVertices.size();
+		nz/=adjVertices.size();
+		float newx=P.X+lambda*(nx-P.X);
+		float newy=P.Y+lambda*(ny-P.Y);
+		float newz=P.Z+lambda*(nz-P.Z);
 		return Point3d(newx,newy,newz);
 	}
-	Point3d GetSmoothedVertex_ScaleDependentLaplacian(size_t index)
+	Point3d GetSmoothedVertex_ScaleDependentLaplacian(size_t index,float lambda=1.0f)
 	{
 		float dx=0,dy=0,dz=0;
 		std::vector<long>& adjVertices=*(this->mesh->AdjInfos[index].VertexAdjacencyList);
@@ -258,12 +257,12 @@ private:
 		dx/=sumweight;
 		dy/=sumweight;
 		dz/=sumweight;
-		float newx=dx+p.X;
-		float newy=dy+p.Y;
-		float newz=dz+p.Z;
+		float newx=lambda*dx+p.X;
+		float newy=lambda*dy+p.Y;
+		float newz=lambda*dz+p.Z;
 		return Point3d(newx,newy,newz);
 	}
-	Point3d GetSmoothedVertex_Taubin(size_t index,float lambda)
+	Point3d GetSmoothedVertex_Taubin_Step(size_t index,float lambda)
 	{
 		float dx=0,dy=0,dz=0;
 		std::vector<long>& adjVertices=*(this->mesh->AdjInfos[index].VertexAdjacencyList);

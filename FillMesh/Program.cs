@@ -8,19 +8,15 @@ namespace FillMesh
     {
         static void Main(string[] args)
         {
-            string path = @"table1.ply";
+            string path = @"D:\VTKproj\FillMeshTest.ply";
             Mesh mesh=new Mesh();
             PlyManager.ReadMeshFile(mesh, path);
-            MeshFiller mf = new MeshFiller(mesh);
-            BitMap3d bmp = mf.FillImage();
-           // bmp.SaveRaw("ret1 " + bmp.width + "_" + bmp.height + "_" + bmp.depth + ".raw");
-            FloodFill3d sp = new FloodFill3d();
-            sp.ExcuteFloodFill(bmp, new Int16Triple(0, 0, 0));
-            bmp.Reverse();
-            bmp.SaveRaw("ret2"+bmp.width+"_"+bmp.height+"_"+bmp.depth+".raw"); 
-            //CuberilleProcessor cb = new CuberilleProcessor(bmp);
-            //Mesh ret = cb.GeneratorSurface();
-            //PlyManager.Output(ret, "ret2.ply");
+            MeshVoxelizer mf = new MeshVoxelizer(mesh);
+            List<Int16Triple> list = mf.GetVoxels();
+            BitMap3d bmp = BitMap3d.CreateFromPointSet(list);
+            CuberilleProcessor cb = new CuberilleProcessor(bmp);
+            Mesh ret = cb.GeneratorSurface();
+            PlyManager.Output(ret, "test.ply");
         }
     }
 }

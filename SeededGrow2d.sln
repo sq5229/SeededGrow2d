@@ -33,6 +33,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QEM", "QEM\QEM.csproj", "{4
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Smoothing", "Smoothing\Smoothing.vcxproj", "{A725FF2E-EB10-48B6-91BB-CBFEF01CB7B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrowingStrategies", "GrowingStrategies\GrowingStrategies.csproj", "{0E57651B-9568-47D7-B0F9-2BE48BD164C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContourLineRecon", "ContourLineRecon\ContourLineRecon.csproj", "{DBA38721-0387-455F-B991-7A1484DCB1F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -203,6 +207,26 @@ Global
 		{A725FF2E-EB10-48B6-91BB-CBFEF01CB7B2}.Release|Win32.ActiveCfg = Release|Win32
 		{A725FF2E-EB10-48B6-91BB-CBFEF01CB7B2}.Release|Win32.Build.0 = Release|Win32
 		{A725FF2E-EB10-48B6-91BB-CBFEF01CB7B2}.Release|x86.ActiveCfg = Release|Win32
+		{0E57651B-9568-47D7-B0F9-2BE48BD164C0}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{0E57651B-9568-47D7-B0F9-2BE48BD164C0}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{0E57651B-9568-47D7-B0F9-2BE48BD164C0}.Debug|Win32.ActiveCfg = Debug|x86
+		{0E57651B-9568-47D7-B0F9-2BE48BD164C0}.Debug|x86.ActiveCfg = Debug|x86
+		{0E57651B-9568-47D7-B0F9-2BE48BD164C0}.Debug|x86.Build.0 = Debug|x86
+		{0E57651B-9568-47D7-B0F9-2BE48BD164C0}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{0E57651B-9568-47D7-B0F9-2BE48BD164C0}.Release|Mixed Platforms.Build.0 = Release|x86
+		{0E57651B-9568-47D7-B0F9-2BE48BD164C0}.Release|Win32.ActiveCfg = Release|x86
+		{0E57651B-9568-47D7-B0F9-2BE48BD164C0}.Release|x86.ActiveCfg = Release|x86
+		{0E57651B-9568-47D7-B0F9-2BE48BD164C0}.Release|x86.Build.0 = Release|x86
+		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Debug|Win32.ActiveCfg = Debug|x86
+		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Debug|x86.ActiveCfg = Debug|x86
+		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Debug|x86.Build.0 = Debug|x86
+		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Release|Mixed Platforms.Build.0 = Release|x86
+		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Release|Win32.ActiveCfg = Release|x86
+		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Release|x86.ActiveCfg = Release|x86
+		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

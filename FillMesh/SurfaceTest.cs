@@ -212,7 +212,7 @@ namespace FillMesh
             int Height = bmp.height;
             int Depth = bmp.depth;
             Int16Triple[] adjPoints6 = new Int16Triple[6];
-            MeshBuilder_IntegerVertex mb = new MeshBuilder_IntegerVertex(bmp.width, bmp.height, bmp.depth);
+            MeshBuilder_IntegerVertex mb = new MeshBuilder_IntegerVertex(bmp.width+2, bmp.height+2, bmp.depth+2);
 
             for (int k = 0; k <= Depth - 1; k++)
             {
@@ -282,7 +282,7 @@ namespace FillMesh
         }
         public virtual bool IsInside(int x, int y, int z)
         {
-            if (x <= 0 || y <= 0 || z <= 0 || x > bmp.width || y > bmp.height || z > bmp.depth)
+            if (x <= 0 || y <= 0 || z <= 0 || x >= bmp.width || y >= bmp.height || z >= bmp.depth)
                 return false;
             else
             {

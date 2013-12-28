@@ -4,33 +4,36 @@ using System.Text;
 
 namespace FillMesh
 {
-    enum ParentDirections
+    public class SpanFill3d
     {
-        Y0 = 1, Y2 = 2, Z0 = 3, Z2 = 4, Non = 5
-    }
-    enum ExtendTypes
-    {
-        LeftRequired = 1, RightRequired = 2, AllRez = 3, UnRez = 4
-    }
-    struct Span
-    {
-        public int XLeft;
-        public int XRight;
-        public int Y;
-        public int Z;
-        public ExtendTypes Extended;
-        public ParentDirections ParentDirection;
-    }
-    class SpanFill3d
-    {
-        protected int count = 0;
-        protected BitMap3d bmp;
-        protected Stack<Span> container;//以Span为单位的Queue或Stack容器
-        public virtual void ExcuteSpanFill(BitMap3d data, Int16Triple seed)
+        private enum ParentDirections
         {
-            container = new Stack<Span>();
+            Y0 = 1, Y2 = 2, Z0 = 3, Z2 = 4, Non = 5
+        }
+        private enum ExtendTypes
+        {
+            LeftRequired = 1, RightRequired = 2, AllRez = 3, UnRez = 4
+        }
+        private struct Span
+        {
+            public int XLeft;
+            public int XRight;
+            public int Y;
+            public int Z;
+            public ExtendTypes Extended;
+            public ParentDirections ParentDirection;
+        }
+        private byte includeColor;
+        private byte replaceColor;
+        private ByteMatrix bmp;
+        private Stack<Span> container;
+        public virtual void ExcuteSpanFill(ByteMatrix data, Int16Triple seed, byte includeColor,byte replaceColor)
+        {
+            this.includeColor = includeColor;
+            this.replaceColor = replaceColor;
+            this.container = new Stack<Span>();
             this.bmp = data;
-            bmp.SetPixel(seed.X, seed.Y, seed.Z,BitMap3d.WHITE);
+            Process(seed.X, seed.Y, seed.Z);
             Span seedspan = new Span();
             seedspan.XLeft = seed.X;
             seedspan.XRight = seed.X;
@@ -40,7 +43,7 @@ namespace FillMesh
             seedspan.Extended = ExtendTypes.UnRez;
             container.Push(seedspan);
 
-            while (container.Count!=0)
+            while (container.Count != 0)
             {
                 Span span = container.Pop();
                 #region AllRez
@@ -291,7 +294,7 @@ namespace FillMesh
                 #endregion
             }
         }
-        protected void CheckRange(int xleft, int xright, int y, int z, ParentDirections ptype)
+        private void CheckRange(int xleft, int xright, int y, int z, ParentDirections ptype)
         {
             for (int i = xleft; i <= xright; )
             {
@@ -329,7 +332,7 @@ namespace FillMesh
                     span.ParentDirection = ptype;
                     for (int j = lb; j <= rb; j++)
                     {
-                        bmp.SetPixel(j, y, z,BitMap3d.WHITE);
+                        Process(j, y, z);
                     }
                     container.Push(span);
 
@@ -340,8 +343,8 @@ namespace FillMesh
                     i++;
                 }
             }
-        }//区段法的CheckRange 注意与扫描线的CheckRange的不同
-        protected int FindXRight(int x, int y, int z)
+        }
+        private int FindXRight(int x, int y, int z)
         {
             int xright = x + 1;
             while (true)
@@ -355,8 +358,7 @@ namespace FillMesh
                     if (IncludePredicate(xright, y, z))
                     {
                         Int16Triple t = new Int16Triple(xright, y, z);
-                        bmp.SetPixel(xright, y, z, BitMap3d.WHITE);
-                        //Process(t);
+                        Process(xright, y, z);
                         xright++;
                     }
                     else
@@ -367,7 +369,7 @@ namespace FillMesh
             }
             return xright - 1;
         }
-        protected int FindXLeft(int x, int y, int z)
+        private int FindXLeft(int x, int y, int z)
         {
             int xleft = x - 1;
             while (true)
@@ -381,7 +383,7 @@ namespace FillMesh
                     if (IncludePredicate(xleft, y, z))
                     {
                         Int16Triple t = new Int16Triple(xleft, y, z);
-                        bmp.SetPixel(xleft, y, z, BitMap3d.WHITE);
+                        Process(xleft, y, z);
                         xleft--;
                     }
                     else
@@ -392,65 +394,13 @@ namespace FillMesh
             }
             return xleft + 1;
         }
-        protected bool IncludePredicate(int x, int y, int z)
+        private bool IncludePredicate(int x, int y, int z)
         {
-            return bmp.GetPixel(x, y, z) != BitMap3d.WHITE;
+            return bmp.GetValue(x, y, z) ==includeColor;
         }
-    }
-    class FloodFill3d
-    {
-        protected void InitAdj6(ref Int16Triple[] adjPoints6, ref Int16Triple p)
+        private void Process(int x, int y, int z)
         {
-            adjPoints6[0].X = p.X - 1;
-            adjPoints6[0].Y = p.Y;
-            adjPoints6[0].Z = p.Z;
-
-            adjPoints6[1].X = p.X + 1;
-            adjPoints6[1].Y = p.Y;
-            adjPoints6[1].Z = p.Z;
-
-            adjPoints6[2].X = p.X;
-            adjPoints6[2].Y = p.Y - 1;
-            adjPoints6[2].Z = p.Z;
-
-            adjPoints6[3].X = p.X;
-            adjPoints6[3].Y = p.Y + 1;
-            adjPoints6[3].Z = p.Z;
-
-
-            adjPoints6[4].X = p.X;
-            adjPoints6[4].Y = p.Y;
-            adjPoints6[4].Z = p.Z - 1;
-
-            adjPoints6[5].X = p.X;
-            adjPoints6[5].Y = p.Y;
-            adjPoints6[5].Z = p.Z + 1;
-        }
-        public virtual void ExcuteFloodFill(BitMap3d data, Int16Triple seed)
-        {
-            BitMap3d bmp = data;
-            Int16Triple[] adjPoints6 = new Int16Triple[6];
-            Queue<Int16Triple> container = new Queue<Int16Triple>();
-            bmp.SetPixel(seed.X, seed.Y, seed.Z, BitMap3d.WHITE);
-            container.Enqueue(seed);
-            while (container.Count!=0)
-            {
-                Int16Triple p = container.Dequeue();
-                InitAdj6(ref adjPoints6, ref p);
-                for (int adjIndex = 0; adjIndex < 6; adjIndex++)
-                {
-                    Int16Triple t = adjPoints6[adjIndex];
-                    if (t.X < data.width && t.X >= 0 && t.Y < data.height && t.Y >= 0 && t.Z < data.depth && t.Z >= 0)
-                    {
-                        if (bmp.GetPixel(t.X,t.Y,t.Z)!=BitMap3d.WHITE)
-                        {
-                            bmp.SetPixel(t.X, t.Y, t.Z, BitMap3d.WHITE);
-                            container.Enqueue(t);
-                        }
-                    }
-                }
-            }
-            return;
+            bmp.SetValue(x, y, z, replaceColor);
         }
     }
 }

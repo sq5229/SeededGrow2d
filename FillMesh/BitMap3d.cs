@@ -5,6 +5,39 @@ using System.IO;
 
 namespace FillMesh
 {
+    public class Box3Int
+    {
+        public int[] Min3;
+        public int[] Max3;
+        public Box3Int()
+        {
+            Min3 = new int[3] { int.MaxValue, int.MaxValue, int.MaxValue };
+            Max3 = new int[3] { int.MinValue, int.MinValue, int.MinValue };
+        }
+        public void UpdataRange(int x, int y, int z)
+        {
+            if (x < Min3[0])
+                Min3[0] = x;
+            if (y < Min3[1])
+                Min3[1] = y;
+            if (z < Min3[2])
+                Min3[2] = z;
+
+            if (x > Max3[0])
+                Max3[0] = x;
+            if (y > Max3[1])
+                Max3[1] = y;
+            if (z > Max3[2])
+                Max3[2] = z;
+        }
+        public int GetXLength() { return Max3[0] - Min3[0] + 1; }
+        public int GetYLength() { return Max3[1] - Min3[1] + 1; }
+        public int GetZLength() { return Max3[2] - Min3[2] + 1; }
+        public override string ToString()
+        {
+            return string.Format("[{0},{1}] [{2},{3}] [{4},{5}]", Min3[0], Max3[0], Min3[1], Max3[1], Min3[2], Max3[2]);
+        }
+    }
     public class BitMap3d
     {
         public const byte WHITE = 255;
@@ -207,6 +240,65 @@ namespace FillMesh
                 }
             }
             return image;
+        }
+
+        public static BitMap3d CreateFromPointSet(List<Int16Triple> list)
+        {
+            Box3Int box = new Box3Int();
+            for (int i = 0; i < list.Count; i++)
+                box.UpdataRange(list[i].X, list[i].Y, list[i].Z);
+            BitMap3d bmp = new BitMap3d(box.Max3[0]+1, box.Max3[1]+1, box.Max3[2]+1, 0);
+            for (int i = 0; i < list.Count; i++)
+            {
+                bmp.SetPixel(list[i].X, list[i].Y, list[i].Z, 255);
+            }
+            return bmp;
+        }
+    }
+    public class ByteMatrix
+    {
+        public int stx;
+        public int sty;
+        public int stz;
+        public byte[] data;
+        public int width;
+        public int height;
+        public int depth;
+        int wh;
+        public ByteMatrix(int stx,int sty,int stz,int width, int height, int depth, byte v)
+        {
+            this.stx = stx;
+            this.sty = sty;
+            this.stz = stz;
+            this.width = width;
+            this.height = height;
+            this.depth = depth;
+            this.wh = width * height;
+            data = new byte[width * height * depth];
+            for (int i = 0; i < width * height * depth; i++)
+                data[i] = v;
+        }
+        public void SetValue_OFF(int x, int y, int z, byte v)
+        {
+            x -= stx;
+            y -= sty;
+            z -= stz;
+            data[x + y * width + z * wh] = v;
+        }
+        public byte GetValue_OFF(int x, int y, int z)
+        {
+            x -= stx;
+            y -= sty;
+            z -= stz;
+            return data[x + y * width + z * wh];
+        }
+        public void SetValue(int x, int y, int z, byte v)
+        {
+            data[x + y * width + z * wh] = v;
+        }
+        public byte GetValue(int x, int y, int z)
+        {
+            return data[x + y * width + z * wh];
         }
     }
 }
