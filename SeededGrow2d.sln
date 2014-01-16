@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrowingStrategies", "Growin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContourLineRecon", "ContourLineRecon\ContourLineRecon.csproj", "{DBA38721-0387-455F-B991-7A1484DCB1F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindMaxima", "FindMaxima\FindMaxima.csproj", "{10DD6139-D1E5-4519-9DF2-89288FB55256}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -227,6 +229,16 @@ Global
 		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Release|Win32.ActiveCfg = Release|x86
 		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Release|x86.ActiveCfg = Release|x86
 		{DBA38721-0387-455F-B991-7A1484DCB1F5}.Release|x86.Build.0 = Release|x86
+		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Debug|Win32.ActiveCfg = Debug|x86
+		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Debug|x86.ActiveCfg = Debug|x86
+		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Debug|x86.Build.0 = Debug|x86
+		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Release|Mixed Platforms.Build.0 = Release|x86
+		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Release|Win32.ActiveCfg = Release|x86
+		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Release|x86.ActiveCfg = Release|x86
+		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,11 +3,23 @@
 #include "Base.h"
 #include <vector>
 #include <algorithm>
+/// <summary>
+/// 
+/// </summary>
 class Mesh
 {
 public:
+	/// <summary>
+	/// The vertices
+	/// </summary>
 	std::vector<Point3d> Vertices;
+	/// <summary>
+	/// The faces
+	/// </summary>
 	std::vector<Triangle> Faces;
+	/// <summary>
+	/// The adj infos
+	/// </summary>
 	std::vector<PointAttachmentInfo> AdjInfos;
 	bool GetIsPerVertexVertexInfoEnabled();
 	bool GetIsPerVertexTriangleInfoEnabled();
@@ -37,12 +49,22 @@ Mesh::~Mesh()
 		ClearPerVertexVertexAdj();
 }
 
+/// <summary>
+/// Adds the vertex.
+/// </summary>
+/// <param name="toAdd">To add.</param>
+/// <returns></returns>
 long Mesh::AddVertex(Point3d& toAdd)
 {
 	long index = (long)Vertices.size();
 	Vertices.push_back(toAdd);
 	return index;
 }
+/// <summary>
+/// Adds the face.
+/// </summary>
+/// <param name="tri">The tri.</param>
+/// <returns></returns>
 long  Mesh::AddFace(Triangle& tri)
 {
 	long  index = (long)Faces.size();
@@ -51,6 +73,9 @@ long  Mesh::AddFace(Triangle& tri)
 }
 
 
+/// <summary>
+/// Initializes the per vertex vertex adj.
+/// </summary>
 void Mesh::InitPerVertexVertexAdj()
 {
 	if(IsPerVertexVertexInfoEnabled)
@@ -90,6 +115,9 @@ void Mesh::InitPerVertexVertexAdj()
 			p2list->push_back(t.P1Index);
 	}
 }
+/// <summary>
+/// Initializes the per vertex triangle adj.
+/// </summary>
 void Mesh::InitPerVertexTriangleAdj()
 {
 	if(IsPerVertexTriangleInfoEnabled)
@@ -115,6 +143,9 @@ void Mesh::InitPerVertexTriangleAdj()
 		t2list->push_back(i);
 	}
 }
+/// <summary>
+/// Clears the per vertex vertex adj.
+/// </summary>
 void Mesh::ClearPerVertexVertexAdj()
 {
 	if(!IsPerVertexVertexInfoEnabled)
@@ -129,6 +160,9 @@ void Mesh::ClearPerVertexVertexAdj()
 	}
 	IsPerVertexVertexInfoEnabled = false;
 }
+/// <summary>
+/// Clears the per vertex triangle adj.
+/// </summary>
 void Mesh::ClearPerVertexTriangleAdj()
 {
 	if(!IsPerVertexTriangleInfoEnabled)
@@ -144,10 +178,18 @@ void Mesh::ClearPerVertexTriangleAdj()
 	IsPerVertexTriangleInfoEnabled = false;
 }
 
+/// <summary>
+/// Gets the is per vertex vertex information enabled.
+/// </summary>
+/// <returns></returns>
 bool Mesh::GetIsPerVertexVertexInfoEnabled()
 {
 	return IsPerVertexVertexInfoEnabled;
 }
+/// <summary>
+/// Gets the is per vertex triangle information enabled.
+/// </summary>
+/// <returns></returns>
 bool Mesh::GetIsPerVertexTriangleInfoEnabled()
 {
 	return IsPerVertexTriangleInfoEnabled;

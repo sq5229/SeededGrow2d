@@ -24,7 +24,6 @@ public:
 		this->Z = z;
 	}
 };
-
 struct Triangle
 {
 public :
@@ -44,7 +43,6 @@ public :
 		P2Index=-1;
 	}
 };
-
 struct Vector
 {
 public:
@@ -67,8 +65,6 @@ public:
 		this->Z = z;
 	}
 };
-
-
 Vector CaculateTriangleNormal(Point3d& p0, Point3d& p1, Point3d& p2)
 {
 	Vector Normal;
@@ -84,7 +80,6 @@ Vector CaculateTriangleNormal(Point3d& p0, Point3d& p1, Point3d& p2)
 	float len = (float)sqrt(Normal.X * Normal.X + Normal.Y * Normal.Y + Normal.Z * Normal.Z);
 	if (len == 0)
 	{
-		//throw Exception();
 	}
 	else
 	{
@@ -94,22 +89,20 @@ Vector CaculateTriangleNormal(Point3d& p0, Point3d& p1, Point3d& p2)
 	}
 	return Normal;
 }
-
 class Mesh
 {
 public:
-	std::vector<Point3d> Vertices;//存放点的集合
-	std::vector<Triangle> Faces;//存放三角形的集合
-	std::vector<Vector> FaceNormals;//存放面法向的集合，与三角形集合一一对应
-	std::vector<Vector> VertexNormals;//存放点法向的集合，与点集一一对应
-	std::vector<std::vector<int>*> AdjacentFacesPerVertex;//存放点的邻接面的集合，与点集一一对应
-	std::vector<std::vector<int>*> AdjacentVerticesPerVertex;//存放点的邻接点的集合，与点集一一对应
+	std::vector<Point3d> Vertices;
+	std::vector<Triangle> Faces;
+	std::vector<Vector> FaceNormals;
+	std::vector<Vector> VertexNormals;
+	std::vector<std::vector<int>*> AdjacentFacesPerVertex;
+	std::vector<std::vector<int>*> AdjacentVerticesPerVertex;
 	Mesh()
 	{
 	}
 	~Mesh()
 	{
-
 	}
 	int AddVertex(Point3d& toAdd)
 	{
@@ -133,14 +126,14 @@ public:
 			Point3d& p2=Vertices[Faces[i].P2Index];
 			Vector v=CaculateTriangleNormal(p0,p1,p2);
 			FaceNormals.push_back(v);
-		}//对每一个三角形计算面法向并存至FaceNormals
-	}//计算面发向
+		}
+	}
 	void CaculateVertexNormals()
 	{
 		if(FaceNormals.size()==0)
-			CaculateFaceNormals();//计算点法向前需计算完面法向
+			CaculateFaceNormals();
 		if(AdjacentFacesPerVertex.size()==0)
-			CaculateAdjacentFacesPerVertex();//计算点法向前也必须计算完邻接面
+			CaculateAdjacentFacesPerVertex();
 		VertexNormals.reserve(Vertices.size());
 		for (size_t i = 0; i < Vertices.size(); i++)
 		{
@@ -156,23 +149,23 @@ public:
 					sumy += FaceNormals[tlist[j]].Y;
 					sumz += FaceNormals[tlist[j]].Z;
 				}
-				VertexNormals.push_back(Vector(sumx / tlist.size(), sumy / tlist.size(), sumz /tlist.size()));//求邻接面发向均值
+				VertexNormals.push_back(Vector(sumx / tlist.size(), sumy / tlist.size(), sumz /tlist.size()));
 			}
 			else
 			{
-				VertexNormals.push_back(Vector(0,0,0));//若为孤立点则使用默认值
+				VertexNormals.push_back(Vector(0,0,0));
 			}
 		}
-	}//计算点法向
+	}
 	void CaculateAdjacentFacesPerVertex()
 	{
 		AdjacentFacesPerVertex.reserve(Vertices.size());
 		for (size_t i = 0; i < Vertices.size(); i++)
 		{
 			std::vector<int>* list=new std::vector<int>();
-			list->reserve(4);//预先假设每个点大概有4个邻接面
+			list->reserve(4);
 			AdjacentFacesPerVertex.push_back(list);
-		}//首先分配好存储空间
+		}
 		for (size_t i = 0; i < Faces.size(); i++)
 		{
 			Triangle& t = Faces[i];
@@ -182,45 +175,42 @@ public:
 			t0list->push_back(i);
 			t1list->push_back(i);
 			t2list->push_back(i);
-		}//遍历三角形集合，使用三角形信息补充邻接面表
-	}//计算邻接面
+		}
+	}
 	void CaculateAdjacentVerticesPerVertex()
 	{
 		AdjacentVerticesPerVertex.reserve(Vertices.size());
 		for (size_t i = 0; i < Vertices.size(); i++)
 		{
 			std::vector<int>* list=new std::vector<int>();
-			list->reserve(4);//预先假设每个点大概有4个邻接点
+			list->reserve(4);
 			AdjacentVerticesPerVertex.push_back(list);
-		}//首先分配好存储空间
+		}
 		for (size_t i = 0; i < Faces.size(); i++)
 		{
 			Triangle &t = Faces[i];
 			std::vector<int> *p0list= AdjacentVerticesPerVertex[t.P0Index];
 			std::vector<int> *p1list= AdjacentVerticesPerVertex[t.P1Index];
 			std::vector<int> *p2list= AdjacentVerticesPerVertex[t.P2Index];
-
 			if (std::find(p0list->begin(), p0list->end(), t.P1Index)==p0list->end())
 				p0list->push_back(t.P1Index);
 			if (std::find(p0list->begin(), p0list->end(), t.P2Index)==p0list->end())
 				p0list->push_back(t.P2Index);
-
 			if (std::find(p1list->begin(), p1list->end(), t.P0Index)==p1list->end())
 				p1list->push_back(t.P0Index);
 			if (std::find(p1list->begin(), p1list->end(), t.P2Index)==p1list->end())
 				p1list->push_back(t.P2Index);
-
 			if (std::find(p2list->begin(), p2list->end(), t.P0Index)==p2list->end())
 				p2list->push_back(t.P0Index);
 			if (std::find(p2list->begin(), p2list->end(), t.P1Index)==p2list->end())
 				p2list->push_back(t.P1Index);
-		}//遍历三角形集合，使用三角形信息补充邻接面表
-	}//计算邻接点
+		}
+	}
 	void LaplacianSmooth(int time)
 	{
 		if(AdjacentVerticesPerVertex.size()==0)
-			CaculateAdjacentVerticesPerVertex();//平滑前需要计算邻接点
-		Point3d* tempPos=new Point3d[Vertices.size()];//辅助空间存储每次平滑后的点将要挪到的位置
+			CaculateAdjacentVerticesPerVertex();
+		Point3d* tempPos=new Point3d[Vertices.size()];
 		for(int k=0;k<time;k++)
 		{
 			for (size_t i = 0; i < Vertices.size(); i++)
@@ -244,18 +234,15 @@ public:
 				tempPos[i].X = xav;
 				tempPos[i].Y = yav;
 				tempPos[i].Z = zav;
-			}//对所有点计算邻接点平均位置并存到辅助空间
+			}
 			for (size_t i = 0; i < Vertices.size(); i++)
 			{
 				Vertices[i].X = tempPos[i].X;
 				Vertices[i].Y = tempPos[i].Y;
 				Vertices[i].Z = tempPos[i].Z;
-			}//将计算出的新点位置覆盖原来点的位置
-		}//每次循环意味着一次平滑
+			}
+		}
 		delete[] tempPos;
 	}
 };
-
-
-
 #endif

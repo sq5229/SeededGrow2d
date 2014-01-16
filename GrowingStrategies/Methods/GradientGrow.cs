@@ -21,11 +21,11 @@ namespace GrowingStrategies.Methods
         protected Container<Int16Double> container;
         public List<Int16Double> results = new List<Int16Double>();
         protected int count = 0;
-        protected virtual bool IncludePredicate(Int16Double p,Int16Double or)
+        protected virtual bool IncludePredicate(Int16Double p, Int16Double or)
         {
             byte v = bmp.GetPixel(p.X, p.Y);
             byte vr = bmp.GetPixel(or.X, or.Y);
-            return vr>=v;            
+            return Math.Abs(vr - v) < r;
         }
         protected virtual bool InRange(int x, int y)
         {

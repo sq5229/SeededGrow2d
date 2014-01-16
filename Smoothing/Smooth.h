@@ -1,3 +1,19 @@
+// ***********************************************************************
+// Assembly         : Smoothing
+// Author           : Chen Yuexi
+// Created          : 12-17-2013
+//
+// Last Modified By : Chen Yuexi
+// Last Modified On : 01-08-2014
+// ***********************************************************************
+// <copyright file="Smooth.h" company="BeiHang University">
+//     Copyright (c) BeiHang University. All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+
+
+
 #ifndef SMOOTH_H
 #define SMOOTH_H
 #include "Base.h"
@@ -5,21 +21,37 @@
 #include <math.h>
 
 
+/// <summary>
+/// Class Smoothing
+/// </summary>
 class Smoothing
 {
 private:
+	/// <summary>
+	/// The mesh
+	/// </summary>
 	Mesh* mesh;
 public:
+	/// <summary>
+	/// Initializes a new instance of the <see cref="Smoothing" /> class.
+	/// </summary>
+	/// <param name="m">The m.</param>
 	Smoothing(Mesh* m)
 	{
 		this->mesh=m;
 		m->InitPerVertexVertexAdj();
 	}
+	/// <summary>
+	/// Finalizes an instance of the <see cref="Smoothing" /> class.
+	/// </summary>
 	~Smoothing()
 	{
 		this->mesh=NULL;
 	}
 public:
+	/// <summary>
+	/// Laplacians this instance.
+	/// </summary>
 	void Laplacian()
 	{
 		Point3d* tempList=new Point3d[mesh->Vertices.size()];
@@ -33,6 +65,10 @@ public:
 		}
 		delete[] tempList;
 	}
+	/// <summary>
+	/// Scales the dependent laplacian.
+	/// </summary>
+	/// <param name="iterationTime">The iteration time.</param>
 	void ScaleDependentLaplacian(int iterationTime)
 	{
 		Point3d* tempList=new Point3d[mesh->Vertices.size()];
@@ -49,6 +85,14 @@ public:
 		}
 		delete[] tempList;
 	}
+    
+	
+	/// <summary>
+	/// Taubins the specified iteration time.
+	/// </summary>
+	/// <param name="iterationTime">The iteration time.</param>
+	/// <param name="lambda">The lambda.</param>
+	/// <param name="mu">The mu.</param>
 	void Taubin(int iterationTime,float lambda,float mu)
 	{
 		Point3d* tempList=new Point3d[mesh->Vertices.size()];
@@ -73,6 +117,10 @@ public:
 		}
 		delete[] tempList;
 	}
+	/// <summary>
+	/// Cots the weighted laplacian.
+	/// </summary>
+	/// <param name="iterationTime">The iteration time.</param>
 	void CotWeightedLaplacian(int iterationTime)
 	{
 		if(!mesh->GetIsPerVertexTriangleInfoEnabled())
@@ -91,6 +139,12 @@ public:
 		}
 		delete[] tempList;
 	}
+	/// <summary>
+	/// HCs the laplacian.
+	/// </summary>
+	/// <param name="iterationTime">The iteration time.</param>
+	/// <param name="factor1">The factor1.</param>
+	/// <param name="factor2">The factor2.</param>
 	void HCLaplacian(int iterationTime,float factor1,float factor2)
 	{
 		std::vector<Point3d> point_vector;
@@ -163,10 +217,24 @@ public:
 	}
 
 private:
+	/// <summary>
+	/// Gets the distence.
+	/// </summary>
+	/// <param name="p1">The p1.</param>
+	/// <param name="p2">The p2.</param>
+	/// <returns>float.</returns>
 	float GetDistence(Point3d& p1,Point3d& p2)
 	{
 		return (float)sqrt((p1.X-p2.X)*(p1.X-p2.X)+(p1.Y-p2.Y)*(p1.Y-p2.Y)+(p1.Z-p2.Z)*(p1.Z-p2.Z));
 	}
+	/// <summary>
+	/// Gets the cot weight.
+	/// </summary>
+	/// <param name="index">The index.</param>
+	/// <param name="adjindex">The adjindex.</param>
+	/// <param name="adjVertices">The adj vertices.</param>
+	/// <param name="adjFaces">The adj faces.</param>
+	/// <returns>float.</returns>
 	float GetCotWeight(size_t index,int adjindex,std::vector<long>& adjVertices,std::vector<long>& adjFaces)
 	{
 		float w=0;
@@ -187,6 +255,12 @@ private:
 		w=w/count;
 		return w;
 	}
+	/// <summary>
+	/// Gets the cot.
+	/// </summary>
+	/// <param name="t">The t.</param>
+	/// <param name="index">The index.</param>
+	/// <returns>float.</returns>
 	float GetCot(Triangle& t,long index)
 	{
 		std::vector<Point3d>& v=mesh->Vertices;
@@ -206,6 +280,13 @@ private:
 
 		return cos/sqrt(1-cos*cos);
 	}
+	/// <summary>
+	/// Gets the cos.
+	/// </summary>
+	/// <param name="ps">The ps.</param>
+	/// <param name="pe1">The pe1.</param>
+	/// <param name="pe2">The pe2.</param>
+	/// <returns>float.</returns>
 	float GetCos(Point3d& ps,Point3d& pe1,Point3d& pe2)
 	{
 		Vector pse1(pe1.X-ps.X,pe1.Y-ps.Y,pe1.Z-ps.Z);
@@ -216,6 +297,12 @@ private:
 		return mul/(mo1*mo2);
 	}
 
+	/// <summary>
+	/// Gets the smoothed vertex_ laplacian.
+	/// </summary>
+	/// <param name="index">The index.</param>
+	/// <param name="lambda">The lambda.</param>
+	/// <returns>Point3d.</returns>
 	Point3d GetSmoothedVertex_Laplacian(size_t index,float lambda=1.0f)
 	{
 		float nx=0,ny=0,nz=0;
@@ -237,6 +324,12 @@ private:
 		float newz=P.Z+lambda*(nz-P.Z);
 		return Point3d(newx,newy,newz);
 	}
+	/// <summary>
+	/// Gets the smoothed vertex_ scale dependent laplacian.
+	/// </summary>
+	/// <param name="index">The index.</param>
+	/// <param name="lambda">The lambda.</param>
+	/// <returns>Point3d.</returns>
 	Point3d GetSmoothedVertex_ScaleDependentLaplacian(size_t index,float lambda=1.0f)
 	{
 		float dx=0,dy=0,dz=0;
@@ -262,6 +355,12 @@ private:
 		float newz=lambda*dz+p.Z;
 		return Point3d(newx,newy,newz);
 	}
+	/// <summary>
+	/// Gets the smoothed vertex_ taubin_ step.
+	/// </summary>
+	/// <param name="index">The index.</param>
+	/// <param name="lambda">The lambda.</param>
+	/// <returns>Point3d.</returns>
 	Point3d GetSmoothedVertex_Taubin_Step(size_t index,float lambda)
 	{
 		float dx=0,dy=0,dz=0;
@@ -284,6 +383,11 @@ private:
 		float newz=lambda*dz+p.Z;
 		return Point3d(newx,newy,newz);
 	}
+	/// <summary>
+	/// Gets the smoothed vertex_ cot weighted laplacian.
+	/// </summary>
+	/// <param name="index">The index.</param>
+	/// <returns>Point3d.</returns>
 	Point3d GetSmoothedVertex_CotWeightedLaplacian(size_t index)
 	{
 		float dx=0,dy=0,dz=0;

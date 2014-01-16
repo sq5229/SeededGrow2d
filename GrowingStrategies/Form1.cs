@@ -17,8 +17,8 @@ namespace GrowingStrategies
         public Form1()
         {
             InitializeComponent();
-            bmp = new BitMap2d(299,297,0);
-            bmp.ReadBitmap(@"F:\workspacecsharp\RecentProject\SeededGrow2d\GrowingStrategies\Image\Clipboard.bmp");
+            bmp = new BitMap2d(PB_OR.Width,PB_OR.Height,0);
+            bmp.ReadBitmap(@"F:\workspacecsharp\RecentProject\SeededGrow2d\GrowingStrategies\Image\228_274.bmp");
             this.PB_OR.MouseMove += new MouseEventHandler(TMouseMove);
             this.PB_TE.MouseMove += new MouseEventHandler(TMouseMove);
             this.PB_T.MouseMove += new MouseEventHandler(TMouseMove);
@@ -30,9 +30,13 @@ namespace GrowingStrategies
             PB_CF.MouseClick += new MouseEventHandler(PB_MouseClick);
             PB_O.MouseClick += new MouseEventHandler(PB_MouseClick);
 
-            this.BTN_EX.Click += new EventHandler(BTN_EX_Click);
+            this.BTN_1.Click += new EventHandler(BTN_EX_Click);
+            this.BTN_2.Click += new EventHandler(BTN_2_Click);
+            this.BTN_3.Click += new EventHandler(BTN_3_Click);
+            this.BTN_4.Click += new EventHandler(BTN_4_Click);
         }
 
+        
         void PB_MouseClick(object sender, MouseEventArgs e)
         {
             seed1.X = e.X;
@@ -54,9 +58,7 @@ namespace GrowingStrategies
         void BTN_EX_Click(object sender, EventArgs e)
         {
             string p1 = TB_T.Text;
-            string p2 = TB_TE.Text;
-            string p3 = TB_CF.Text;
-            string p4 = TB_O.Text;
+
             if (!string.IsNullOrEmpty(p1))
             {
                 string[] ps = p1.Split(' ');
@@ -64,28 +66,41 @@ namespace GrowingStrategies
                 byte max = Convert.ToByte(ps[1]);
                 Threshold thres = new Threshold(bmp, seed1, min, max);
                 thres.ExcuteFloodFill();
-                ShowResult(thres.results, PB_T,label2);
-            }
+                ShowResult(thres.results, PB_T, label2);
+            }   
+           
+        }
+        void BTN_2_Click(object sender, EventArgs e)
+        {
+            string p2 = TB_TE.Text;
             if (!string.IsNullOrEmpty(p2))
             {
                 string[] ps = p2.Split(' ');
                 byte min = Convert.ToByte(ps[0]);
                 byte max = Convert.ToByte(ps[1]);
-                int  r = Convert.ToByte(ps[2]);
+                int r = Convert.ToByte(ps[2]);
                 Threshold_Ero thres = new Threshold_Ero(bmp, seed1, min, max, r);
                 thres.ExcuteFloodFill();
-                ShowResult(thres.results, PB_TE,label3);
+                ShowResult(thres.results, PB_TE, label3);
             }
+        }
+        void BTN_3_Click(object sender, EventArgs e)
+        {
+            string p3 = TB_CF.Text;
             if (!string.IsNullOrEmpty(p3))
             {
                 string[] ps = p3.Split(' ');
                 int iter = Convert.ToInt32(ps[0]);
                 double factor = Convert.ToDouble(ps[1]);
                 int r = Convert.ToByte(ps[2]);
-                Confidence thres = new Confidence(bmp, seed1,iter,factor,r);
+                Confidence thres = new Confidence(bmp, seed1, iter, factor, r);
                 thres.ExcuteFloodFill();
                 ShowResult(thres.results, PB_CF, label4);
             }
+        }
+        void BTN_4_Click(object sender, EventArgs e)
+        {
+            string p4 = TB_O.Text;
             if (!string.IsNullOrEmpty(p4))
             {
                 byte r = Convert.ToByte(p4);
@@ -94,6 +109,8 @@ namespace GrowingStrategies
                 ShowResult(thres.results, PB_O, label5);
             }
         }
+       
+        
 
         void ShowResult(List<Int16Double> ret, PictureBox pb,Label l)
         {
