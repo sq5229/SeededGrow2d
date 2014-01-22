@@ -17,6 +17,10 @@ namespace FindMaxima
             Y = y;
         }
     }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 13026892c6df762b9e1d0fbbfe24aaf32cd364ef
     public struct Int16DoubleWithValue:IComparable<Int16DoubleWithValue>
     {
         public int X;
@@ -34,6 +38,10 @@ namespace FindMaxima
             return -this.V.CompareTo(other.V);
         }
     }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 13026892c6df762b9e1d0fbbfe24aaf32cd364ef
     public class BitMap2d
     {
         public float[] data;
@@ -117,6 +125,10 @@ namespace FindMaxima
             return bmp;
         }
     }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 13026892c6df762b9e1d0fbbfe24aaf32cd364ef
     public class FlagMap2d
     {
         public int action_set_count;

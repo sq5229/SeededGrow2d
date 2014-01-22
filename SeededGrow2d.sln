@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContourLineRecon", "Contour
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindMaxima", "FindMaxima\FindMaxima.csproj", "{10DD6139-D1E5-4519-9DF2-89288FB55256}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrawLine2d", "DrawLine2d\DrawLine2d.vcxproj", "{0005308E-3DA5-4986-A93F-7A3D6DAD4562}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -239,6 +241,16 @@ Global
 		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Release|Win32.ActiveCfg = Release|x86
 		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Release|x86.ActiveCfg = Release|x86
 		{10DD6139-D1E5-4519-9DF2-89288FB55256}.Release|x86.Build.0 = Release|x86
+		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Debug|Win32.Build.0 = Debug|Win32
+		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Debug|x86.ActiveCfg = Debug|Win32
+		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Release|Win32.ActiveCfg = Release|Win32
+		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Release|Win32.Build.0 = Release|Win32
+		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
