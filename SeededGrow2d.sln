@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindMaxima", "FindMaxima\Fi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrawLine2d", "DrawLine2d\DrawLine2d.vcxproj", "{0005308E-3DA5-4986-A93F-7A3D6DAD4562}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DilateErodeImp", "DilateErodeImp\DilateErodeImp.vcxproj", "{552F60D5-3E61-482D-9521-1A35024E45E3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -251,6 +253,16 @@ Global
 		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Release|Win32.ActiveCfg = Release|Win32
 		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Release|Win32.Build.0 = Release|Win32
 		{0005308E-3DA5-4986-A93F-7A3D6DAD4562}.Release|x86.ActiveCfg = Release|Win32
+		{552F60D5-3E61-482D-9521-1A35024E45E3}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{552F60D5-3E61-482D-9521-1A35024E45E3}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{552F60D5-3E61-482D-9521-1A35024E45E3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{552F60D5-3E61-482D-9521-1A35024E45E3}.Debug|Win32.Build.0 = Debug|Win32
+		{552F60D5-3E61-482D-9521-1A35024E45E3}.Debug|x86.ActiveCfg = Debug|Win32
+		{552F60D5-3E61-482D-9521-1A35024E45E3}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{552F60D5-3E61-482D-9521-1A35024E45E3}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{552F60D5-3E61-482D-9521-1A35024E45E3}.Release|Win32.ActiveCfg = Release|Win32
+		{552F60D5-3E61-482D-9521-1A35024E45E3}.Release|Win32.Build.0 = Release|Win32
+		{552F60D5-3E61-482D-9521-1A35024E45E3}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

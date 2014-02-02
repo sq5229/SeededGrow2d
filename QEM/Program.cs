@@ -24,34 +24,56 @@ namespace QEM
             Console.WriteLine(heap.ToString());
         }
     }
-
+    struct EdgeAndWeight:IComparable<EdgeAndWeight>
+    {
+        public int weight;
+        public int edgeID;
+        public int CompareTo(EdgeAndWeight other)
+        {
+            return this.weight.CompareTo(other.weight);
+        }
+    }
     class Program
     {
         static void Main(string[] args)
         {
-            Mesh m = Sample.GetSampleMesh1(5);
+            Mesh m = Sample.GetSampleMesh2(100);
+            PlyManager.Output(m, "D://VTKproj//sample.ply");
             ECMesh ecm = ECMesh.GetECMesh(m);
-            int c = 0;
-            for (int i = 0;; i++)
+            List<EdgeAndWeight> edgeWeights = new List<EdgeAndWeight>(ecm.Edges.Count);
+            Random r=new Random();
+            for (int i = 0; i < ecm.Edges.Count; i++)
             {
-                int r =( i * i * i + i * i) % ecm.Edges.Count;
-                r += ecm.Edges.Count;
-                r %= ecm.Edges.Count;
-                ECEdge randomEdge = ecm.Edges[r];
-                if (randomEdge.IsValid()&&randomEdge.OrgV().Type==VertexType.INTERIOR&&randomEdge.DestV().Type==VertexType.INTERIOR)
+                EdgeAndWeight ew = new EdgeAndWeight();
+                ew.edgeID = i;
+                ew.weight = r.Next(0, 10000);
+                edgeWeights.Add(ew);
+            }
+            edgeWeights.Sort();
+            int deciCount = ecm.Edges.Count/10;
+            int index=0;
+            while (deciCount != 0)
+            {
+                if (index == edgeWeights.Count)
+                    break;
+                EdgeAndWeight ew = edgeWeights[index];
+                ECEdge edge = ecm.Edges[ew.edgeID];
+                if (edge.IsValid() && edge.OrgV().Type == VertexType.INTERIOR && edge.DestV().Type == VertexType.INTERIOR)
                 {
-                    c++;
-                    if (c == 5)
-                        break;
-                    ECVertex v0 = randomEdge.OrgV();
-                    ECVertex v1 = randomEdge.DestV();
+                    ECVertex v0 = edge.OrgV();
+                    ECVertex v1 = edge.DestV();
                     Point3d mid = new Point3d(v0.X / 2 + v1.X / 2, v0.Y / 2 + v1.Y / 2, v0.Z / 2 + v1.Z / 2);
                     ecm.Contract(v0, v1, mid);
+                    deciCount--;
+                    index++;
                 }
-                
+                else
+                {
+                    index++;
+                    continue;
+                }
             }
             m = ecm.GetMesh();
-            //Console.WriteLine(ecm);
             PlyManager.Output(m, "test2.ply");
             Console.WriteLine("\nCMP!");
             Console.Read();
