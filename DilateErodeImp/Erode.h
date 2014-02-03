@@ -15,10 +15,12 @@ private:
 	Bitmap2d& bmp;
 	int radius;
 	std::vector<IntDouble> winOffsets;
+	WindowMode mode;
 public:
 	ErodeProcessor(Bitmap2d& bitmap,int radius,WindowMode mode):bmp(bitmap)
 	{
 		this->radius=radius;
+		this->mode=mode;
 		InitWindowOffsets(mode);
 	}
 	~ErodeProcessor(){}
@@ -29,7 +31,7 @@ public:
 		{
 			for(int i=0;i<bmp.Width();i++)
 			{
-				if(HasBlackInWindow(i,j))
+				if(HasBlackInWindow(this->bmp,i,j))
 					newBmp->SetValue(i,j,0);
 				else
 					newBmp->SetValue(i,j,255);
@@ -68,7 +70,49 @@ public:
 		delete dmap;
 		return newBmp;
 	}
-
+	Bitmap2d* Execute4()
+	{
+		Bitmap2d* newBmp=new Bitmap2d(bmp);
+		Bitmap2d* newBmp2=new Bitmap2d(bmp);
+		if(this->mode==SQUARE)
+		{
+			winOffsets.clear();
+			for (int i = 0; i < 2 * radius + 1; i++)
+			{
+				IntDouble t(i-radius,0);
+				this->winOffsets.push_back(t);
+			}
+			for(int j=0;j<bmp.Height();j++)
+			{
+				for(int i=0;i<bmp.Width();i++)
+				{
+					if(HasBlackInWindow(this->bmp,i,j))
+						newBmp->SetValue(i,j,0);
+					else
+						newBmp->SetValue(i,j,255);
+				}
+			}
+			winOffsets.clear();
+			for (int j = 0; j < 2 * radius + 1; j++)
+			{
+				IntDouble t(0,j-radius);
+				this->winOffsets.push_back(t);
+			}
+			for(int j=0;j<newBmp->Height();j++)
+			{
+				for(int i=0;i<newBmp->Width();i++)
+				{
+					if(HasBlackInWindow(*newBmp,i,j))
+						newBmp2->SetValue(i,j,0);
+					else
+						newBmp2->SetValue(i,j,255);
+				}
+			}
+		}
+		newBmp2->visit_count+=newBmp->visit_count;
+		delete newBmp;
+		return newBmp2;
+	}
 private:
 	inline int Min(int a,int b)
 	{
@@ -118,7 +162,7 @@ private:
 			}
 		}
 	}
-	bool HasBlackInWindow(int i,int j)
+	bool HasBlackInWindow(Bitmap2d& bmp,int i,int j)
 	{
 		for(size_t k=0;k<winOffsets.size();k++)
 		{
