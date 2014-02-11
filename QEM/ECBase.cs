@@ -101,7 +101,6 @@ namespace QEM
                 return VertexType.BORDER;
             return VertexType.BORDER_ONLY;
         }
-
         public override string ToString()
         {
             StringBuilder sb=new StringBuilder();

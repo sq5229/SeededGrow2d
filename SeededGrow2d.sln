@@ -43,6 +43,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrawLine2d", "DrawLine2d\Dr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DilateErodeImp", "DilateErodeImp\DilateErodeImp.vcxproj", "{552F60D5-3E61-482D-9521-1A35024E45E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WingedEdge", "WingedEdge\WingedEdge.csproj", "{C40E3E85-C445-4D8E-A359-3037C481BA7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QEMHeap", "QEMHeap\QEMHeap.csproj", "{DF673FCD-1DFF-4188-BD83-6C8E6A75CF5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -263,6 +267,26 @@ Global
 		{552F60D5-3E61-482D-9521-1A35024E45E3}.Release|Win32.ActiveCfg = Release|Win32
 		{552F60D5-3E61-482D-9521-1A35024E45E3}.Release|Win32.Build.0 = Release|Win32
 		{552F60D5-3E61-482D-9521-1A35024E45E3}.Release|x86.ActiveCfg = Release|Win32
+		{C40E3E85-C445-4D8E-A359-3037C481BA7E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{C40E3E85-C445-4D8E-A359-3037C481BA7E}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{C40E3E85-C445-4D8E-A359-3037C481BA7E}.Debug|Win32.ActiveCfg = Debug|x86
+		{C40E3E85-C445-4D8E-A359-3037C481BA7E}.Debug|x86.ActiveCfg = Debug|x86
+		{C40E3E85-C445-4D8E-A359-3037C481BA7E}.Debug|x86.Build.0 = Debug|x86
+		{C40E3E85-C445-4D8E-A359-3037C481BA7E}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{C40E3E85-C445-4D8E-A359-3037C481BA7E}.Release|Mixed Platforms.Build.0 = Release|x86
+		{C40E3E85-C445-4D8E-A359-3037C481BA7E}.Release|Win32.ActiveCfg = Release|x86
+		{C40E3E85-C445-4D8E-A359-3037C481BA7E}.Release|x86.ActiveCfg = Release|x86
+		{C40E3E85-C445-4D8E-A359-3037C481BA7E}.Release|x86.Build.0 = Release|x86
+		{DF673FCD-1DFF-4188-BD83-6C8E6A75CF5F}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{DF673FCD-1DFF-4188-BD83-6C8E6A75CF5F}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{DF673FCD-1DFF-4188-BD83-6C8E6A75CF5F}.Debug|Win32.ActiveCfg = Debug|x86
+		{DF673FCD-1DFF-4188-BD83-6C8E6A75CF5F}.Debug|x86.ActiveCfg = Debug|x86
+		{DF673FCD-1DFF-4188-BD83-6C8E6A75CF5F}.Debug|x86.Build.0 = Debug|x86
+		{DF673FCD-1DFF-4188-BD83-6C8E6A75CF5F}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{DF673FCD-1DFF-4188-BD83-6C8E6A75CF5F}.Release|Mixed Platforms.Build.0 = Release|x86
+		{DF673FCD-1DFF-4188-BD83-6C8E6A75CF5F}.Release|Win32.ActiveCfg = Release|x86
+		{DF673FCD-1DFF-4188-BD83-6C8E6A75CF5F}.Release|x86.ActiveCfg = Release|x86
+		{DF673FCD-1DFF-4188-BD83-6C8E6A75CF5F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
