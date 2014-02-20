@@ -75,11 +75,8 @@ public:
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Point3d" /> struct.
 	/// </summary>
-	Point3d() 
+	Point3d() :X(0),Y(0),Z(0)
 	{
-		X = 0;
-		Y = 0;
-		Z = 0;
 	}
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Point3d" /> struct.
@@ -87,11 +84,8 @@ public:
 	/// <param name="x">The x.</param>
 	/// <param name="y">The y.</param>
 	/// <param name="z">The z.</param>
-	Point3d(float x, float y, float z) 
+	Point3d(float x, float y, float z) :X(x),Y(y),Z(z)
 	{
-		X = x;
-		Y = y;
-		Z = z;
 	}
 };
 /// <summary>
@@ -118,21 +112,11 @@ public :
 	/// <param name="p0index">The p0index.</param>
 	/// <param name="p1index">The p1index.</param>
 	/// <param name="p2index">The p2index.</param>
-	Triangle(long p0index, long p1index, long p2index)
-	{
-		P0Index=p0index;
-		P1Index=p1index;
-		P2Index=p2index;
-	}
+	Triangle(long p0index, long p1index, long p2index):P0Index(p0index),P1Index(p1index),P2Index(p2index){}
 	/// <summary>
 	/// Initializes a new instance of the <see cref="Triangle" /> struct.
 	/// </summary>
-	Triangle()
-	{
-		P0Index=-1;
-		P1Index=-1;
-		P2Index=-1;
-	}
+	Triangle():P0Index(-1),P1Index(-1),P2Index(-1){}
 public:
 	/// <summary>
 	/// Determines whether the specified index has vertex.

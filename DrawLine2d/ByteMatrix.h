@@ -33,15 +33,11 @@ struct Point2d
 {
 	int X;
 	int Y;
-	Point2d()
+	Point2d():X(-1),Y(-1)
 	{
-		X=-1;
-		Y=-1;
 	}
-	Point2d(int x,int y)
+	Point2d(int x,int y):X(x),Y(y)
 	{
-		this->X=x;
-		this->Y=y;
 	}
 };
 class ByteMatrix

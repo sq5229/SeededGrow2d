@@ -8,15 +8,11 @@ struct IntDouble
 {
 	int X;
 	int Y;
-	IntDouble(int x,int y)
+	IntDouble(int x,int y):X(x),Y(y)
 	{
-		this->X=x;
-		this->Y=y;
 	}
-	IntDouble()
+	IntDouble():X(0),Y(0)
 	{
-		this->X=0;
-		this->Y=0;
 	}
 };
 

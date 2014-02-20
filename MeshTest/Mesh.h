@@ -8,20 +8,11 @@ public:
 	float X;
 	float Y;
 	float Z;
-	Point3d() 
-	{
-		X = 0;
-		Y = 0;
-		Z = 0;
-	}
-	~Point3d()
+	Point3d():X(0),Y(0),Z(0)
 	{
 	}
-	Point3d(float x, float y, float z) 
+	Point3d(float x, float y, float z):X(x),Y(y),Z(z)
 	{
-		this->X = x;
-		this->Y = y;
-		this->Z = z;
 	}
 };
 struct Triangle
@@ -30,18 +21,8 @@ public :
 	int P0Index;
 	int P1Index;
 	int P2Index;
-	Triangle(int p0index, int p1index, int p2index)
-	{
-		this->P0Index=p0index;
-		this->P1Index=p1index;
-		this->P2Index=p2index;
-	}
-	Triangle()
-	{
-		P0Index=-1;
-		P1Index=-1;
-		P2Index=-1;
-	}
+	Triangle(int p0index, int p1index, int p2index):P0Index(p0index),P1Index(p1index),P2Index(p2index){}
+	Triangle():P0Index(-1),P1Index(-1),P2Index(-1){}
 };
 struct Vector
 {
@@ -49,20 +30,11 @@ public:
 	float X;
 	float Y;
 	float Z;
-	Vector() 
-	{
-		X = 0;
-		Y = 0;
-		Z = 0;
-	}
-	~Vector()
+	Vector() :X(0),Y(0),Z(0)
 	{
 	}
-	Vector(float x, float y, float z) 
+	Vector(float x, float y, float z) :X(x),Y(y),Z(z)
 	{
-		this->X = x;
-		this->Y = y;
-		this->Z = z;
 	}
 };
 Vector CaculateTriangleNormal(Point3d& p0, Point3d& p1, Point3d& p2)
