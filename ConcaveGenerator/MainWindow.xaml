@@ -1,0 +1,60 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="ConcaveGenerator.MainWindow"
+        Height="511" Width="826" WindowStartupLocation="CenterScreen" Title="Concave">
+	<Window.Resources>
+		<Style x:Key="STY_ELP" TargetType="{x:Type Ellipse}">
+			<Setter Property="Fill" Value="Red"/>
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="Height" Value="12"/>
+			<Setter Property="Stroke" Value="Black"/>
+			<Setter Property="VerticalAlignment" Value="Top"/>
+			<Setter Property="Width" Value="12"/>
+			<Setter Property="StrokeThickness" Value="2"/>
+		</Style>
+		<Style x:Key="STY_TB" TargetType="{x:Type TextBlock}">
+			<Setter Property="Height" Value="17.166"/>
+			<Setter Property="TextWrapping" Value="NOWrap"/>
+			<Setter Property="Text" Value="P0(123,123)"/>
+			<Setter Property="Width" Value="61.167"/>
+			<Setter Property="FontSize" Value="9.333"/>
+		</Style>
+	</Window.Resources>
+    <Grid>
+    	
+    	<Border BorderThickness="2" CornerRadius="4" Background="Black" Margin="0,22,316,0">
+	    	<Canvas x:Name="CA_Main" Margin="2" Cursor="Cross">
+	    		<Canvas.Background>
+	    			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+	    				<GradientStop Color="#FFF6FFCE" Offset="0"/>
+	    				<GradientStop Color="#FFD9EF79" Offset="1"/>
+	    			</LinearGradientBrush>
+	    		</Canvas.Background>
+	    	</Canvas>
+        </Border>
+    	<Button x:Name="BTN_Cal" Content="计算凹包" HorizontalAlignment="Right" Height="26" Margin="0,0,73,8" VerticalAlignment="Bottom" Width="71"/>
+    	
+    	<Canvas HorizontalAlignment="Right" Height="79.5" Margin="0,8,8,0" VerticalAlignment="Top" Width="263">
+			<Line x:Name="line" X2="{Binding Value, ElementName=slider}" Y1="41" Y2="41" Stroke="Red" StrokeThickness="4" Canvas.Top="29.166" />
+			<Polyline Height="49" Width="119.797"/>
+			<Slider x:Name="slider" Canvas.Top="3.166" Width="263" Maximum="265" Value="38"/>
+			<TextBlock TextWrapping="Wrap" Canvas.Top="33.163" Text="{Binding X2, ElementName=line}" RenderTransformOrigin="3.908,0.705" Canvas.Left="51.025"/>
+			<TextBlock TextWrapping="Wrap" Canvas.Top="33.163" RenderTransformOrigin="3.908,0.705" Canvas.Left="5.852" Text="半径值:"/>
+			<TextBlock TextWrapping="Wrap" Canvas.Top="61.829" RenderTransformOrigin="3.908,0.705" Canvas.Left="-37.008" Text="长度:"/>
+			<TextBlock TextWrapping="Wrap" Canvas.Top="29.166" RenderTransformOrigin="3.908,0.705" Canvas.Left="-37.008" Text="参数"/>
+			<TextBlock TextWrapping="Wrap" Canvas.Top="92.495" RenderTransformOrigin="3.908,0.705" Canvas.Left="-37.008" Text="算法:"/>
+    	</Canvas>
+    	<TextBox x:Name="TB_MEG" HorizontalAlignment="Right" Margin="0,148,8,46.333" TextWrapping="Wrap" Width="304"/>
+    	<TextBlock HorizontalAlignment="Right" Height="2" Margin="0,123,237,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="2"/>
+    	<Button x:Name="BTN_StateCheck" Content="检查参数(自动计算合适的R)" HorizontalAlignment="Right" Height="26" Margin="0,0,148,8" VerticalAlignment="Bottom" Width="158"/>
+        <Button Content="清除结果" Height="26" HorizontalAlignment="Right" Margin="0,0,8,8" Name="BTN_Clear" VerticalAlignment="Bottom" Width="61" />
+        <Button Content="ClearRet!" Height="26" HorizontalAlignment="Right" Margin="0,0,34,8" Name="BTN_ClearR" VerticalAlignment="Bottom" Width="61" Visibility="Collapsed" />
+        <ComboBox x:Name="CB_List" HorizontalAlignment="Right" Height="19.333" Margin="0,99.667,146.334,0" VerticalAlignment="Top" Width="124.666">
+        	<ComboBoxItem Content="Delauney Based" IsSelected="True" HorizontalAlignment="Left"/>
+			<ComboBoxItem Content="Ball Pivoting" HorizontalAlignment="Left"/>
+			<ComboBoxItem Content="Edge Pivoting(Test)"/>
+        </ComboBox>
+        <CheckBox x:Name="CHB_ShowAssis" Content="显示辅助图形(计算完成后点击有效)" HorizontalAlignment="Right" Height="19" Margin="0,129,58,0" VerticalAlignment="Top" Width="213"/>
+        <TextBlock HorizontalAlignment="Left" Height="15" Margin="8,3,0,0" TextWrapping="Wrap" Text="请在下方区域点击不少于5个点：" VerticalAlignment="Top" Width="213"/>
+    </Grid>
+</Window>
