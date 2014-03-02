@@ -48,7 +48,7 @@ namespace ConcaveGenerator
                 Point2d p0=retMesh.Points[t.P0Index];
                 Point2d p1=retMesh.Points[t.P1Index];
                 Point2d p2=retMesh.Points[t.P2Index];
-                if (ConcaveGenerator.DelaunayConcave.DelaunayTriangluation.Diameter(p0.X, p0.Y, p1.X, p1.Y, p2.X, p2.Y)>=p)
+                if (ConcaveGenerator.DelaunayConcave.DelaunayTriangulation.Diameter(p0.X, p0.Y, p1.X, p1.Y, p2.X, p2.Y)>=p)
                 {
                     for (int j = 0; j < CA_Main.Children.Count; j++)
                     {

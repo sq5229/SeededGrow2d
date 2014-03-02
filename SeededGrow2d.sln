@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QEMHeap", "QEMHeap\QEMHeap.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConcaveGenerator", "ConcaveGenerator\ConcaveGenerator.csproj", "{BF6FB50B-946C-422D-8A98-0053C09B80D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelaunayTriangulation3d", "DelaunayTriangulation3d\DelaunayTriangulation3d.csproj", "{B85E064A-2B13-47D1-AF10-9ABDA58731FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -299,6 +301,16 @@ Global
 		{BF6FB50B-946C-422D-8A98-0053C09B80D9}.Release|Win32.ActiveCfg = Release|x86
 		{BF6FB50B-946C-422D-8A98-0053C09B80D9}.Release|x86.ActiveCfg = Release|x86
 		{BF6FB50B-946C-422D-8A98-0053C09B80D9}.Release|x86.Build.0 = Release|x86
+		{B85E064A-2B13-47D1-AF10-9ABDA58731FE}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{B85E064A-2B13-47D1-AF10-9ABDA58731FE}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{B85E064A-2B13-47D1-AF10-9ABDA58731FE}.Debug|Win32.ActiveCfg = Debug|x86
+		{B85E064A-2B13-47D1-AF10-9ABDA58731FE}.Debug|x86.ActiveCfg = Debug|x86
+		{B85E064A-2B13-47D1-AF10-9ABDA58731FE}.Debug|x86.Build.0 = Debug|x86
+		{B85E064A-2B13-47D1-AF10-9ABDA58731FE}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{B85E064A-2B13-47D1-AF10-9ABDA58731FE}.Release|Mixed Platforms.Build.0 = Release|x86
+		{B85E064A-2B13-47D1-AF10-9ABDA58731FE}.Release|Win32.ActiveCfg = Release|x86
+		{B85E064A-2B13-47D1-AF10-9ABDA58731FE}.Release|x86.ActiveCfg = Release|x86
+		{B85E064A-2B13-47D1-AF10-9ABDA58731FE}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
