@@ -6,9 +6,7 @@ namespace QEM
 {
     public class QEMProcessor
     {
-        
-
-
+       
         Mesh mesh;
         ECMesh ecm;
         RAHeap heap;
