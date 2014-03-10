@@ -107,4 +107,5 @@ namespace SeededGrowSMC
             Faces.Clear();
         }
     }
+
 }

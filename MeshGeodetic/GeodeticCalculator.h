@@ -1,30 +1,35 @@
 #ifndef GEODETICCALCULATOR_H
 #define GEODETICCALCULATOR_H
-#define MAX_Dis 9999999999.0f
+#define MAX_DIS 9999999999.0f
 #include <vector>
 #include <math.h>
 #include "Mesh.h"
-class DijkstraSet_Linear
+
+class DijkstraSet
+{
+public:
+	virtual void Add(int pindex)=0;// required heap operations
+	virtual  int ExtractMin()=0;// required heap operations
+	virtual  int GetCount()=0;// required heap operations
+	virtual void DecreaseKey(int pindex)=0;// required heap operations, when update shorter distance :dist[v]=dist[u] + dist_between(u, v) ;
+};
+/**
+ \brief	Dijkstra set linear.. using O(n) linear search to find min element in set
+ */
+class DijkstraSet_Linear:public DijkstraSet
 {
 private:
 	std::vector<int> reachedSet;
 	std::vector<float>* values;
-	std::vector<bool> inSetFlag;
 public:
 	DijkstraSet_Linear(int maxsize,std::vector<float>* values)
 	{
 		this->values=values;
-		this->inSetFlag.resize(maxsize,false);
 	}
 	~DijkstraSet_Linear(){}
 	void Add(int pindex)
 	{
 		this->reachedSet.push_back(pindex);
-		inSetFlag[pindex]=true;
-	}
-	bool Exist(int pindex)
-	{
-		return inSetFlag[pindex];
 	}
 	int ExtractMin()
 	{
@@ -37,17 +42,20 @@ public:
 	{
 		return reachedSet.size();
 	}
+	void DecreaseKey(int pindex)
+	{
+		//do nothing cuz this element distribution won't change with the key
+	}
 private:
 	void RemoveAt(int index)
 	{
 		reachedSet[index]=reachedSet[reachedSet.size()-1];
 		reachedSet.pop_back();
-		inSetFlag[index]=false;
 	}
 	int GetMinIndex()
 	{
 		std::vector<float>& distanceMap=*values;
-		float min=MAX_Dis;
+		float min=MAX_DIS;
 		int index=-1;
 		for(size_t i=0;i<reachedSet.size();i++)
 		{
@@ -60,28 +68,27 @@ private:
 		return index;
 	}
 };
-class DijkstraSet_Heap
+/**
+ \brief	Dijkstra set heap.. using O(logn) operation to extract min element in set
+ */
+class DijkstraSet_Heap:public DijkstraSet
 {
 private:
 	std::vector<int> heapArray;
 	std::vector<float>* values;
-	std::vector<bool> inreachedSet;
+	std::vector<int> setIndexMap;// stores the index to heapArray for each vertexIndex, -1 if not exist
 public:
 	DijkstraSet_Heap(int maxsize,std::vector<float>* values)
 	{
 		this->values=values;
-		this->inreachedSet.resize(maxsize,false);
+		this->setIndexMap.resize(maxsize,-1);
 	}
 	~DijkstraSet_Heap(){}
 	void Add(int pindex)
 	{
 		this->heapArray.push_back(pindex);
+		setIndexMap[pindex]=heapArray.size()-1;
 		ShiftUp(heapArray.size()-1);
-		inreachedSet[pindex]=true;
-	}
-	bool Exist(int pindex)
-	{
-		return inreachedSet[pindex];
 	}
 	int ExtractMin()
 	{
@@ -91,12 +98,16 @@ public:
 		Swap(0,heapArray.size()-1);
 		heapArray.pop_back();
 		ShiftDown(0);
-		inreachedSet[pindex]=false;
+		setIndexMap[pindex]=-1;
 		return pindex;
 	}
 	int GetCount()
 	{
 		return heapArray.size();
+	}
+	void DecreaseKey(int pindex)
+	{
+		ShiftUp(setIndexMap[pindex]);
 	}
 private:
 	int GetParent(int index)
@@ -150,6 +161,8 @@ private:
 		int temp = heapArray[i];
 		heapArray[i] = heapArray[j];
 		heapArray[j] = temp;
+		setIndexMap[heapArray[i]]=i;//record new position
+		setIndexMap[heapArray[j]]=j;//record new position
 	}
 };
 class GeodeticCalculator
@@ -160,7 +173,7 @@ private:
 	int edIndex;
 	std::vector<bool> flagMap;//indicates if the s-path is found
 	std::vector<float> distenceMap;//current s-path length
-	DijkstraSet_Heap* set;//current involved vertices which have path to
+	DijkstraSet* set;//current involved vertices, every vertex in set has a path to start point with distance<MAX_DIS but may not be s-distance.
 	std::vector<int> previus;//previus vertex on each vertex's s-path
 	std::vector<bool> visited;//record visited vertices;
 	std::vector<int> resultPath;//result path from start to end 
@@ -183,19 +196,19 @@ public:
 	}
 	bool ExecuteDijikstra()
 	{
-		this->set=new DijkstraSet_Heap(this->mesh.Vertices.size(),&distenceMap);
+		this->set=new DijkstraSet_Linear(this->mesh.Vertices.size(),&distenceMap);
 		previus.resize(mesh.Vertices.size(),-1);
 		flagMap.resize(mesh.Vertices.size(),false);
-		distenceMap.resize(mesh.Vertices.size(),MAX_Dis);
+		distenceMap.resize(mesh.Vertices.size(),MAX_DIS);
 		set->Add(stIndex);
 		distenceMap[stIndex]=0;
 		while(set->GetCount()!=0)
 		{
-			int pindexnewlyfound=set->ExtractMin();
-			flagMap[pindexnewlyfound]=true;
+			int pindexnewlyfound=set->ExtractMin();// vertex with index "pindexnewlyfound" found its s-path
+			flagMap[pindexnewlyfound]=true;//mark it
 			if(pindexnewlyfound==edIndex)
 				return true;
-			UpdateMinDistance(pindexnewlyfound);
+			UpdateMinDistance(pindexnewlyfound);// update its neighbour's s-distance
 		}
 		return false;
 	}
@@ -241,13 +254,12 @@ private:
 			visited[nindex]=true;
 			if(!flagMap[nindex])
 			{
-				if(!set->Exist(nindex))
-				{
-					set->Add(nindex);
-				}
+				if(distenceMap[nindex]==MAX_DIS)
+					set->Add(nindex);//newly approached vertex is pushed into set
 				if(distenceMap[nindex]>distenceMap[newlyfoundpIndex]+GetWeight(nindex,newlyfoundpIndex))
 				{
 					distenceMap[nindex]=distenceMap[newlyfoundpIndex]+GetWeight(nindex,newlyfoundpIndex);
+					set->DecreaseKey(nindex);// vertex with index "nindex" update its s-distance,so it's position in heap should also be updated.
 					previus[nindex]=newlyfoundpIndex;
 				}
 			}
