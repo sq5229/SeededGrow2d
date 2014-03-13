@@ -99,6 +99,7 @@ namespace ConcaveGenerator
         }
         private void BTN_Clear_Click(object sender, RoutedEventArgs e)
         {
+            OutPutPoints();
             this.pointList.Clear();
             this.CA_Main.Children.Clear();
         }
@@ -124,6 +125,7 @@ namespace ConcaveGenerator
         ConcaveGenerator.DelaunayConcave.DelaunayMesh2d retMesh=null;
         private void BTN_Cal_Click(object sender, RoutedEventArgs e)
         {
+          
             if (CB_List.SelectedIndex == 0)
             {
                 this.retMesh = DelaunayConcave.GetMesh(pointList);
@@ -351,6 +353,17 @@ namespace ConcaveGenerator
         public void ShowMessage(string message)
         {
             TB_MEG.Text = message+Environment.NewLine+Environment.NewLine + TB_MEG.Text;
+        }
+        int c = -1;
+        private void OutPutPoints()
+        {
+            c++;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < pointList.Count; i++)
+            {
+                sb.Append("line"+c+".AddPoint2d("+pointList[i].X+","+pointList[i].Y+");"+Environment.NewLine);
+            }
+            System.IO.File.WriteAllText("points"+c+".txt",sb.ToString());
         }
     }
 }
