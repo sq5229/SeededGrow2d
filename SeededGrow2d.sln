@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DelaunayTriangulation3d", "
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MeshGeodetic", "MeshGeodetic\MeshGeodetic.vcxproj", "{3D62098C-6E19-4220-B2E3-18AC1A8D571B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathSeeker", "PathSeeker\PathSeeker.csproj", "{BA0148BC-0982-448C-9EC1-250131E31EA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -323,6 +325,16 @@ Global
 		{3D62098C-6E19-4220-B2E3-18AC1A8D571B}.Release|Win32.ActiveCfg = Release|Win32
 		{3D62098C-6E19-4220-B2E3-18AC1A8D571B}.Release|Win32.Build.0 = Release|Win32
 		{3D62098C-6E19-4220-B2E3-18AC1A8D571B}.Release|x86.ActiveCfg = Release|Win32
+		{BA0148BC-0982-448C-9EC1-250131E31EA2}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{BA0148BC-0982-448C-9EC1-250131E31EA2}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{BA0148BC-0982-448C-9EC1-250131E31EA2}.Debug|Win32.ActiveCfg = Debug|x86
+		{BA0148BC-0982-448C-9EC1-250131E31EA2}.Debug|x86.ActiveCfg = Debug|x86
+		{BA0148BC-0982-448C-9EC1-250131E31EA2}.Debug|x86.Build.0 = Debug|x86
+		{BA0148BC-0982-448C-9EC1-250131E31EA2}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{BA0148BC-0982-448C-9EC1-250131E31EA2}.Release|Mixed Platforms.Build.0 = Release|x86
+		{BA0148BC-0982-448C-9EC1-250131E31EA2}.Release|Win32.ActiveCfg = Release|x86
+		{BA0148BC-0982-448C-9EC1-250131E31EA2}.Release|x86.ActiveCfg = Release|x86
+		{BA0148BC-0982-448C-9EC1-250131E31EA2}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

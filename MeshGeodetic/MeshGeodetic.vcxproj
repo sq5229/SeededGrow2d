@@ -64,6 +64,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AStarOpenSet.h" />
+    <ClInclude Include="DijkstraOpenSet.h" />
     <ClInclude Include="IOPly.h" />
     <ClInclude Include="Mesh.h" />
   </ItemGroup>
