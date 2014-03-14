@@ -4,7 +4,7 @@
 #include <vector>
 #include <math.h>
 #include "Mesh.h"
-#include "DijkstraOpenSet.h"
+#include "DijkstraSet.h"
 #include "AStarOpenSet.h"
 
 class GeodeticCalculator_Dijk
@@ -13,11 +13,10 @@ private:
 	Mesh& mesh;
 	int stIndex;
 	int edIndex;
-	std::vector<bool> flagMap;//indicates if the s-path is found
-	std::vector<float> distenceMap;//current s-path length
-	DijkstraSet* set;//current involved vertices, every vertex in set has a path to start point with distance<MAX_DIS but may not be s-distance.
+	std::vector<bool> flagMap_Close;//indicates if the s-path is found return true if is closed node
+	DijkstraSet* set_Open;//current involved open vertices, every vertex in set has a path to start point with distance<MAX_DIS but may not be s-distance.
 	std::vector<int> previus;//previus vertex on each vertex's s-path
-	std::vector<bool> visited;//record visited vertices;
+	std::vector<bool> visited;//record visited vertices; not necessary
 	std::vector<int> resultPath;//result path from start to end 
 public:
 	static float Distence(Point3d& p1,Point3d& p2)
@@ -28,26 +27,24 @@ public:
 	GeodeticCalculator_Dijk(Mesh& m,int vstIndex,int vedIndex)
 		:mesh(m),stIndex(vstIndex),edIndex(vedIndex)
 	{
-		set=0;
-		visited.resize(mesh.Vertices.size(),false);
+		this->visited.resize(mesh.Vertices.size(),false);
+		this->set_Open=new DijkstraSet_Heap(this->mesh.Vertices.size());
+		this->previus.resize(mesh.Vertices.size(),-1);
+		this->flagMap_Close.resize(mesh.Vertices.size(),false);
 	}
 	~GeodeticCalculator_Dijk()
 	{
-		if(set!=0) 
-			delete set;
+		if(set_Open!=0) 
+			delete set_Open;
 	}
 	bool Execute()
 	{
-		this->set=new DijkstraSet_Linear(this->mesh.Vertices.size(),&distenceMap);
-		previus.resize(mesh.Vertices.size(),-1);
-		flagMap.resize(mesh.Vertices.size(),false);
-		distenceMap.resize(mesh.Vertices.size(),MAX_DIS);
-		set->Add(stIndex);
-		distenceMap[stIndex]=0;
-		while(set->GetCount()!=0)
+		set_Open->Add(stIndex);
+		set_Open->UpdateDistance(stIndex,0);
+		while(set_Open->GetCount()!=0)
 		{
-			int pindexnewlyfound=set->ExtractMin();// vertex with index "pindexnewlyfound" found its s-path
-			flagMap[pindexnewlyfound]=true;//mark it
+			int pindexnewlyfound=set_Open->ExtractMin();// vertex with index "pindexnewlyfound" found its s-path
+			flagMap_Close[pindexnewlyfound]=true;//mark it as closed
 			if(pindexnewlyfound==edIndex)
 				return true;
 			UpdateMinDistance(pindexnewlyfound);// update its neighbour's s-distance
@@ -101,23 +98,35 @@ private:
 	{
 		return mesh.AdjacentVerticesPerVertex[index];
 	}
-	void UpdateMinDistance(int newlyfoundpIndex)
+	void UpdateMinDistance(int pindex)
 	{
-		std::vector<int>& nlist=GetNeighbourList(newlyfoundpIndex);
+		std::vector<int>& nlist=GetNeighbourList(pindex);
 		for(size_t i=0;i<nlist.size();i++ )
 		{
-			int nindex=nlist[i];
-			visited[nindex]=true;
-			if(!flagMap[nindex])
+			int neighbourindex=nlist[i];
+			visited[neighbourindex]=true;//just for recording , not necessary
+			if(flagMap_Close[neighbourindex])//if Close Nodes
 			{
-				if(distenceMap[nindex]==MAX_DIS)
-					set->Add(nindex);//newly approached vertex is pushed into set
-				if(distenceMap[nindex]>distenceMap[newlyfoundpIndex]+GetWeight(nindex,newlyfoundpIndex))
+				continue;
+			}
+			else
+			{
+				float distancePassp=set_Open->GetDistance(pindex)+GetWeight(neighbourindex,pindex);//calculate distance if the path passes p
+				if(set_Open->GetDistance(neighbourindex)==MAX_DIS) //if unvisited
 				{
-					distenceMap[nindex]=distenceMap[newlyfoundpIndex]+GetWeight(nindex,newlyfoundpIndex);
-					set->DecreaseKey(nindex);// vertex with index "nindex" update its s-distance,so it's position in heap should also be updated.
-					previus[nindex]=newlyfoundpIndex;
+					set_Open->Add(neighbourindex);//newly approached vertex is pushed into set
+					set_Open->UpdateDistance(neighbourindex,distancePassp);
+					previus[neighbourindex]=pindex;// record parent
 				}
+				else// if is open node
+				{
+					if(distancePassp<set_Open->GetDistance(neighbourindex))//test if it's s-distance can be updated
+					{
+						set_Open->UpdateDistance(neighbourindex,distancePassp);// vertex with index "nindex" update its s-distance,so it's position in heap should also be updated.
+						previus[neighbourindex]=pindex;// record parent
+					}
+				}
+				
 			}
 		}
 	}
@@ -131,7 +140,7 @@ private:
 	int edIndex;
 	std::vector<bool> flagMap_Close;//indicates if the s-path is found
 	std::vector<float> gMap;
-	std::vector<float> fMap;
+	//std::vector<float> fMap;
 	AStarSet_Heap* set_Open;//current involved vertices, every vertex in set has a path to start point with distance<MAX_DIS but may not be s-distance.
 	std::vector<int> previus;//previus vertex on each vertex's s-path
 	std::vector<bool> visited;//record visited vertices;
@@ -148,10 +157,9 @@ public:
 		set_Open=0;
 		visited.resize(mesh.Vertices.size(),false);
 		gMap.resize(mesh.Vertices.size(),MAX_DIS);
-		fMap.resize(mesh.Vertices.size(),MAX_DIS);
 		previus.resize(mesh.Vertices.size(),-1);
 		flagMap_Close.resize(mesh.Vertices.size(),false);
-		this->set_Open=new AStarSet_Heap(this->mesh.Vertices.size(),&fMap);
+		this->set_Open=new AStarSet_Heap(this->mesh.Vertices.size());
 	}
 	~GeodeticCalculator_AStar()
 	{
@@ -231,35 +239,36 @@ private:
 	{
 		return mesh.AdjacentVerticesPerVertex[index];
 	}
-	void UpdateMinDistance(int newlyfoundpIndex)
+	void UpdateMinDistance(int pindex)
 	{
-		std::vector<int>& nlist=GetNeighbourList(newlyfoundpIndex);
-		for(size_t i=0;i<nlist.size();i++ )
+		std::vector<int>& neightbourlist=GetNeighbourList(pindex);
+		for(size_t i=0;i<neightbourlist.size();i++ )
 		{
-			int nindex=nlist[i];
-			visited[nindex]=true;
-			if (flagMap_Close[nindex])
+			int neighbourindex=neightbourlist[i];
+			visited[neighbourindex]=true;
+			if (flagMap_Close[neighbourindex])
 			{
 				continue;
 			}
-			float gPassp = gMap[newlyfoundpIndex] + GetWeight(newlyfoundpIndex, nindex);
-			if (set_Open->Exist(nindex))
-			{
-				if (gPassp < gMap[nindex])
-				{
-					float oldvalue=fMap[nindex];
-					gMap[nindex] = gPassp;
-					fMap[nindex] = gPassp + GetH(nindex);
-					set_Open->UpdateKey(nindex,oldvalue);
-					previus[nindex] = newlyfoundpIndex;
-				}
-			}
 			else
 			{
-				gMap[nindex] = gPassp;
-				fMap[nindex] = gPassp + GetH(nindex);
-				previus[nindex] = newlyfoundpIndex;
-				set_Open->Add(nindex);
+				float gPassp = gMap[pindex] + GetWeight(pindex, neighbourindex);
+				if (set_Open->GetDistance(neighbourindex)==MAX_DIS)
+				{
+					if (gPassp < gMap[neighbourindex])
+					{
+						gMap[neighbourindex] = gPassp;
+						set_Open->UpdateDistance(neighbourindex,gPassp + GetH(neighbourindex));
+						previus[neighbourindex] = pindex;
+					}
+				}
+				else
+				{
+					gMap[neighbourindex] = gPassp;
+					set_Open->UpdateDistance(neighbourindex,gPassp + GetH(neighbourindex));
+					previus[neighbourindex] = pindex;
+					set_Open->Add(neighbourindex);
+				}
 			}
 		}
 	}

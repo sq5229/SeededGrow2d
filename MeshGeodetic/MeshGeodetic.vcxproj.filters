@@ -29,10 +29,10 @@
     <ClInclude Include="IOPly.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DijkstraOpenSet.h">
+    <ClInclude Include="AStarOpenSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AStarOpenSet.h">
+    <ClInclude Include="DijkstraSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

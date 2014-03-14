@@ -3,23 +3,23 @@
 #include <vector>
 #include <math.h>
 
-class AStarSet_Heap
+class AStarSet_Heap :public DijkstraSet
 {
 private:
 	std::vector<int> heapArray;
-	std::vector<float>* values;
-	std::vector<int> setIndexMap;// stores the index to heapArray for each vertexIndex, -1 if not exist
+	std::vector<float> f_key;
+	std::vector<int> indexInHeap;// stores the index to heapArray for each vertexIndex, -1 if not exist
 public:
-	AStarSet_Heap(int maxsize,std::vector<float>* values)
+	AStarSet_Heap(int maxsize)
 	{
-		this->values=values;
-		this->setIndexMap.resize(maxsize,-1);
+		this->f_key.resize(maxsize,MAX_DIS);
+		this->indexInHeap.resize(maxsize,-1);
 	}
 	~AStarSet_Heap(){}
 	void Add(int pindex)
 	{
 		this->heapArray.push_back(pindex);
-		setIndexMap[pindex]=heapArray.size()-1;
+		indexInHeap[pindex]=heapArray.size()-1;
 		ShiftUp(heapArray.size()-1);
 	}
 	int ExtractMin()
@@ -30,25 +30,32 @@ public:
 		Swap(0,heapArray.size()-1);
 		heapArray.pop_back();
 		ShiftDown(0);
-		setIndexMap[pindex]=-1;
+		indexInHeap[pindex]=-1;
 		return pindex;
 	}
 	int GetCount()
 	{
 		return heapArray.size();
 	}
-	void UpdateKey(int pindex,float oldValue)
-	{
-		if((*values)[pindex]>oldValue)
-			ShiftDown(setIndexMap[pindex]);
-		else
-			ShiftUp(setIndexMap[pindex]);
-	}
+	
 	bool Exist(int pindex)
 	{
-		return setIndexMap[pindex]!=-1;
+		return indexInHeap[pindex]!=-1;
+	}
+	float GetDistance(int pindex)
+	{
+		return f_key[pindex];
+	}
+	void UpdateDistance(int pindex,float newdistance)
+	{
+		f_key[pindex]=newdistance;
+		DecreaseKey(pindex);
 	}
 private:
+	void DecreaseKey(int pindex)
+	{
+		ShiftUp(indexInHeap[pindex]);
+	}
 	int GetParent(int index)
 	{
 		return (index-1)/2;
@@ -63,7 +70,7 @@ private:
 	}
 	bool IsLessThan(int index0,int index1)
 	{
-		return (*values)[heapArray[index0]]<(*values)[heapArray[index1]];
+		return f_key[heapArray[index0]]<f_key[heapArray[index1]];
 	}
 	void ShiftUp(int i)
 	{
@@ -100,8 +107,8 @@ private:
 		int temp = heapArray[i];
 		heapArray[i] = heapArray[j];
 		heapArray[j] = temp;
-		setIndexMap[heapArray[i]]=i;//record new position
-		setIndexMap[heapArray[j]]=j;//record new position
+		indexInHeap[heapArray[i]]=i;//record new position
+		indexInHeap[heapArray[j]]=j;//record new position
 	}
 };
 
