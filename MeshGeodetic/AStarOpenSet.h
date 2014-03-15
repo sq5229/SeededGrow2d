@@ -37,7 +37,6 @@ public:
 	{
 		return heapArray.size();
 	}
-	
 	bool Exist(int pindex)
 	{
 		return indexInHeap[pindex]!=-1;

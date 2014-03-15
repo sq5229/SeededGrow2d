@@ -1,6 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 #include <vector>
+#include <math.h>
 #include <algorithm>
 struct Point3d
 {
@@ -10,6 +11,11 @@ public:
 	float Z;
 	Point3d():X(0.0f),Y(0.0f),Z(0.0f){}
 	Point3d(float x, float y, float z):X(x),Y(y),Z(z){}
+public:
+	static float Distence(Point3d& p1,Point3d& p2)
+	{
+		return sqrt((p1.X-p2.X)*(p1.X-p2.X)+(p1.Y-p2.Y)*(p1.Y-p2.Y)+(p1.Z-p2.Z)*(p1.Z-p2.Z));
+	}
 };
 struct Triangle
 {
@@ -89,19 +95,24 @@ public:
 		return Max3[2]-Min3[2];
 	}
 };
-class Mesh
+
+
+class AbstractGraph
+{
+public:
+	virtual float GetWeight(int p0Index,int p1Index)=0;
+	virtual float GetEvaDistance(int p0Index,int p1Index)=0;
+	virtual std::vector<int>& GetNeighbourList(int pindex)=0;
+	virtual int GetNodeCount()=0;
+};
+
+class Mesh: public AbstractGraph
 {
 public:
 	std::vector<Point3d> Vertices;
 	std::vector<Color> Vcolors;
 	std::vector<Triangle> Faces;
 	std::vector<std::vector<int>> AdjacentVerticesPerVertex;
-	Mesh()
-	{
-	}
-	~Mesh()
-	{
-	}
 	int AddVertex(Point3d& toAdd)
 	{
 		int index = Vertices.size();
@@ -144,34 +155,26 @@ public:
 				p2list.push_back(t.P1Index);
 		}
 	}
-	void Transform(float dx,float dy,float dz)
+public:
+	float GetWeight(int p0Index,int p1Index)
 	{
-		for(size_t i=0;i<Vertices.size();i++)
-		{
-			Vertices[i].X+=dx;
-			Vertices[i].Y+=dy;
-			Vertices[i].Z+=dz;
-		}
+		if(p0Index==p1Index)
+			return 0;
+		return Point3d::Distence(Vertices[p0Index],Vertices[p1Index]);
 	}
-	void Scale(float rx,float ry,float rz)
+	float GetEvaDistance(int p0Index,int p1Index)
 	{
-		for(size_t i=0;i<Vertices.size();i++)
-		{
-			Vertices[i].X*=rx;
-			Vertices[i].Y*=ry;
-			Vertices[i].Z*=rz;
-		}
+		return Point3d::Distence(Vertices[p0Index],Vertices[p1Index]);
 	}
-	Box3Float GetBox3()
+	std::vector<int>& GetNeighbourList(int index)
 	{
-		Box3Float box;
-		for(size_t i=0;i<Vertices.size();i++)
-		{
-			box.UpdateRange(Vertices[i].X,Vertices[i].Y,Vertices[i].Z);
-		}
-		return box;
+		return AdjacentVerticesPerVertex[index];
 	}
-	
+	int GetNodeCount()
+	{
+		return (int)Vertices.size();
+	}
+
 };
 
 

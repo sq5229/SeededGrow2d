@@ -34,8 +34,6 @@ int main1()
 	Mesh m;
 	PlyManager::ReadFileEx(m,"sampleMapC2.ply");
 	printf("vcount:%d ,fcount:%d\n",m.Vertices.size(),m.Faces.size());
-	Box3Float box=m.GetBox3();
-	printf("box: [%f,%f,%f][%f,%f,%f]\n",box.Min3[0],box.Min3[1],box.Min3[2],box.Max3[0],box.Max3[1],box.Max3[2]);
 	std::vector<int> stindexs=GetStartPointIndex(m);
 	std::vector<int> edindexs=GetEndPointIndex(m);
 	printf("st:%d ,ed:%d\n",stindexs.size(),edindexs.size());
@@ -76,8 +74,6 @@ int main2()
 	Mesh m;
 	PlyManager::ReadFileEx(m,"sampleMapC2.ply");
 	printf("vcount:%d ,fcount:%d\n",m.Vertices.size(),m.Faces.size());
-	Box3Float box=m.GetBox3();
-	printf("box: [%f,%f,%f][%f,%f,%f]\n",box.Min3[0],box.Min3[1],box.Min3[2],box.Max3[0],box.Max3[1],box.Max3[2]);
 	std::vector<int> stindexs=GetStartPointIndex(m);
 	std::vector<int> edindexs=GetEndPointIndex(m);
 	printf("st:%d ,ed:%d\n",stindexs.size(),edindexs.size());
