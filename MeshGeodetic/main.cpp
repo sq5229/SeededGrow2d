@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "Mesh.h"
 #include "IOPly.h"
-#include "GeodeticCalculator.h"
+#include "GeodeticCalculator_AStar.h"
+#include "GeodeticCalculator_Dijkstra.h"
 
 
 std::vector<int> GetStartPointIndex(Mesh& m)
@@ -29,7 +30,7 @@ std::vector<int> GetEndPointIndex(Mesh& m)
 	return temp;
 }
 
-int main1()
+int main1_Astar()
 {
 	Mesh m;
 	PlyManager::ReadFileEx(m,"sampleMapC2.ply");
@@ -69,7 +70,7 @@ int main1()
 	return 0;
 }
 
-int main2()
+int main2_Dijk()
 {
 	Mesh m;
 	PlyManager::ReadFileEx(m,"sampleMapC2.ply");
@@ -111,8 +112,8 @@ int main2()
 
 int main()
 {
-	main1();
-	main2();
+	main1_Astar();
+	main2_Dijk();
 	system("pause");
 	return 0;
 }

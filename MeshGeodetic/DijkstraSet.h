@@ -2,14 +2,17 @@
 #define DIJKSTRASET_H
 #include <vector>
 #include <math.h>
+#define MAX_DIS 9999999999.0f
+/**
+\brief Dijkstra set. parameter pindex represents the id(index) of a certain graph node, 
+ */
 class DijkstraSet
 {
 public:
-	virtual void Add(int pindex)=0;// required heap operations, add new pindex into heap
-	virtual  int ExtractMin()=0;// required heap operations, remove and return the min pindex
-	virtual  int GetCount()=0;// required heap operations, return the element count
-	virtual float GetDistance(int pindex)=0;// return distance[pindex] cuz distance is wrapped
-	virtual void UpdateDistance(int pindex,float newdistance)=0;// required heap operations, when update shorter distance :dist[v]=dist[u] + dist_between(u, v) ;
+	virtual void Add(int pindex)=0;// required operations, add new pindex into set
+	virtual  int ExtractMin()=0;// required operations, remove and return the pindex which has the minimum distance
+	virtual  bool IsEmpty()=0;// required operations, return true if the element count in set==0
+	virtual void DecreaseKey(int pindex)=0;// necessary if implemented as a heap, when update shorter distance :dist[v]=dist[u] + dist_between(u, v) ;
 };
 /**
  \brief	Dijkstra set linear.. using O(n) linear search to find min element in set
@@ -18,13 +21,13 @@ class DijkstraSet_Linear:public DijkstraSet
 {
 private:
 	std::vector<int> linearContainer;
-	std::vector<float> distance;
+    std::vector<float>* distance_key;
 public:
-	DijkstraSet_Linear(int maxsize)
+	DijkstraSet_Linear(int maxsize,std::vector<float>* key)
 	{
-		this->distance.resize(maxsize,MAX_DIS);
+		this->distance_key=key;
 	}
-	~DijkstraSet_Linear(){}
+	~DijkstraSet_Linear(){distance_key=0;}
 	void Add(int pindex)
 	{
 		this->linearContainer.push_back(pindex);
@@ -36,17 +39,13 @@ public:
 		RemoveAt(insetIndex);
 		return ret;
 	}
-	int GetCount()
+	bool IsEmpty()
 	{
-		return linearContainer.size();
+		return linearContainer.size()==0;
 	}
-	float GetDistance(int pindex)
+	void DecreaseKey(int pindex)
 	{
-		return distance[pindex];
-	}
-	void UpdateDistance(int pindex,float newdistance)
-	{
-		distance[pindex]=newdistance;// just update , need not to change in-set position
+		// does nothing
 	}
 private:
 	void RemoveAt(int index)
@@ -62,9 +61,9 @@ private:
 		int index=-1;
 		for(size_t i=0;i<linearContainer.size();i++)
 		{
-			if(distance[linearContainer[i]]<min)
+			if((*distance_key)[linearContainer[i]]<min)
 			{
-				min=distance[linearContainer[i]];
+				min=(*distance_key)[linearContainer[i]];
 				index=i;
 			}
 		}
@@ -78,15 +77,15 @@ class DijkstraSet_Heap:public DijkstraSet
 {
 private:
 	std::vector<int> heapArray;
-	std::vector<float> distance_key;
+	std::vector<float>* distance_key;
 	std::vector<int> indexInHeap;// stores the index to heapArray for each vertexIndex, -1 if not exist
 public:
-	DijkstraSet_Heap(int maxsize)
+	DijkstraSet_Heap(int maxsize,std::vector<float>* key)
 	{
-		this->distance_key.resize(maxsize,MAX_DIS);
+		this->distance_key=key;
 		this->indexInHeap.resize(maxsize,-1);
 	}
-	~DijkstraSet_Heap(){}
+	~DijkstraSet_Heap(){distance_key=0;}
 	void Add(int pindex)
 	{
 		this->heapArray.push_back(pindex);
@@ -95,7 +94,7 @@ public:
 	}
 	int ExtractMin()
 	{
-		if(GetCount()==0)
+		if(heapArray.size()==0)
 			return -1;
 		int pindex=heapArray[0];
 		Swap(0,heapArray.size()-1);
@@ -104,24 +103,15 @@ public:
 		indexInHeap[pindex]=-1;
 		return pindex;
 	}
-	int GetCount()
+	bool IsEmpty()
 	{
-		return heapArray.size();
+		return heapArray.size()==0;
 	}
-	float GetDistance(int pindex)
-	{
-		return distance_key[pindex];
-	}
-	void UpdateDistance(int pindex,float newdistance)
-	{
-		    distance_key[pindex]=newdistance;
-			DecreaseKey(pindex);
-	}
-private:
 	void DecreaseKey(int pindex)
 	{
 		ShiftUp(indexInHeap[pindex]);
 	}
+private:
 	int GetParent(int index)
 	{
 		return (index-1)/2;
@@ -136,7 +126,7 @@ private:
 	}
 	bool IsLessThan(int index0,int index1)
 	{
-		return distance_key[heapArray[index0]]<distance_key[heapArray[index1]];
+		return (*distance_key)[heapArray[index0]]<(*distance_key)[heapArray[index1]];
 	}
 	void ShiftUp(int i)
 	{
@@ -154,13 +144,13 @@ private:
 	}
 	void ShiftDown(int i)
 	{
-		if (i >= GetCount()) return;
+		if (i >= heapArray.size()) return;
 		int min = i;
 		int lc = GetLeftChild(i);
 		int rc = GetRightChild(i);
-		if (lc < GetCount() && IsLessThan(lc,min))
+		if (lc < heapArray.size() && IsLessThan(lc,min))
 			min = lc;
-		if (rc < GetCount() && IsLessThan(rc,min))
+		if (rc < heapArray.size() && IsLessThan(rc,min))
 			min = rc;
 		if (min != i)
 		{

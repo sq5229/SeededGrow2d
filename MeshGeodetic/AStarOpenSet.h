@@ -2,20 +2,20 @@
 #define ASTAROPENSET_H
 #include <vector>
 #include <math.h>
-
-class AStarSet_Heap :public DijkstraSet
+#include "DijkstraSet.h"
+class AStarSet_Heap:DijkstraSet
 {
 private:
 	std::vector<int> heapArray;
-	std::vector<float> f_key;
+	std::vector<float> *f_key;
 	std::vector<int> indexInHeap;// stores the index to heapArray for each vertexIndex, -1 if not exist
 public:
-	AStarSet_Heap(int maxsize)
+	AStarSet_Heap(int maxsize,std::vector<float> *key)
 	{
-		this->f_key.resize(maxsize,MAX_DIS);
+		this->f_key=key;
 		this->indexInHeap.resize(maxsize,-1);
 	}
-	~AStarSet_Heap(){}
+	~AStarSet_Heap(){f_key=0;}
 	void Add(int pindex)
 	{
 		this->heapArray.push_back(pindex);
@@ -24,7 +24,7 @@ public:
 	}
 	int ExtractMin()
 	{
-		if(GetCount()==0)
+		if(heapArray.size()==0)
 			return -1;
 		int pindex=heapArray[0];
 		Swap(0,heapArray.size()-1);
@@ -33,28 +33,15 @@ public:
 		indexInHeap[pindex]=-1;
 		return pindex;
 	}
-	int GetCount()
+	bool IsEmpty()
 	{
-		return heapArray.size();
+		return heapArray.size()==0;
 	}
-	bool Exist(int pindex)
-	{
-		return indexInHeap[pindex]!=-1;
-	}
-	float GetDistance(int pindex)
-	{
-		return f_key[pindex];
-	}
-	void UpdateDistance(int pindex,float newdistance)
-	{
-		f_key[pindex]=newdistance;
-		DecreaseKey(pindex);
-	}
-private:
 	void DecreaseKey(int pindex)
 	{
 		ShiftUp(indexInHeap[pindex]);
 	}
+private:
 	int GetParent(int index)
 	{
 		return (index-1)/2;
@@ -69,7 +56,7 @@ private:
 	}
 	bool IsLessThan(int index0,int index1)
 	{
-		return f_key[heapArray[index0]]<f_key[heapArray[index1]];
+		return (*f_key)[heapArray[index0]]<(*f_key)[heapArray[index1]];
 	}
 	void ShiftUp(int i)
 	{
@@ -87,13 +74,13 @@ private:
 	}
 	void ShiftDown(int i)
 	{
-		if (i >= GetCount()) return;
+		if (i >= heapArray.size()) return;
 		int min = i;
 		int lc = GetLeftChild(i);
 		int rc = GetRightChild(i);
-		if (lc < GetCount() && IsLessThan(lc,min))
+		if (lc < heapArray.size() && IsLessThan(lc,min))
 			min = lc;
-		if (rc < GetCount() && IsLessThan(rc,min))
+		if (rc < heapArray.size() && IsLessThan(rc,min))
 			min = rc;
 		if (min != i)
 		{

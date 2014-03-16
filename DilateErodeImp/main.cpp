@@ -4,7 +4,7 @@
 #include "Dilate.h"
 #define main3 main
 
-int main1()
+int main1_Astar()
 {
 	Bitmap2d bmp(512,512,0);
 	bmp.ReadRaw("D://VTKproj//engine_slice512.raw");
@@ -28,7 +28,7 @@ int main1()
 	system("pause");
 	return 0;
 }
-int main2()
+int main2_Dijk()
 {
 	Bitmap2d bmp(512,512,0);
 	bmp.ReadRaw("D://VTKproj//engine_slice512.raw");
@@ -51,6 +51,6 @@ int main2()
 }
 int main3()
 {
-	main1();
+	main1_Astar();
 	//main2();
 }

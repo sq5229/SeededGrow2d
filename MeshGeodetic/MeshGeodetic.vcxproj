@@ -60,12 +60,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="GeodeticCalculator.h" />
+    <ClCompile Include="GeodeticCalculator_Dijkstra.h" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AStarOpenSet.h" />
     <ClInclude Include="DijkstraSet.h" />
+    <ClInclude Include="GeodeticCalculator_AStar.h" />
     <ClInclude Include="IOPly.h" />
     <ClInclude Include="Mesh.h" />
   </ItemGroup>

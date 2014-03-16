@@ -18,7 +18,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeodeticCalculator.h">
+    <ClCompile Include="GeodeticCalculator_Dijkstra.h">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,6 +33,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DijkstraSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeodeticCalculator_AStar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
