@@ -21,19 +21,20 @@ private:
 public:
 	GeodeticCalculator_Dijk(AbstractGraph& g,int vstIndex,int vedIndex):graph(g),startIndex(vstIndex),endIndex(vedIndex)
 	{
-		this->distance.resize(g.GetNodeCount(),MAX_DIS);
-		this->previus.resize(g.GetNodeCount(),-1);
-		this->flagMap_Close.resize(g.GetNodeCount(),false);
-		this->visited.resize(g.GetNodeCount(),false);
-		this->set_Open=new DijkstraSet_Heap(g.GetNodeCount(),&distance);
+		set_Open=0;
 	}
 	~GeodeticCalculator_Dijk()
 	{ 
-		delete set_Open;
+		if(set_Open!=0) delete set_Open;
 	}
 	//core functions
 	bool Execute()//main function execute Dijkstra, return true if the end point is reached,false if path to end not exist 
 	{
+		this->distance.resize(graph.GetNodeCount(),MAX_DIS);
+		this->previus.resize(graph.GetNodeCount(),-1);
+		this->flagMap_Close.resize(graph.GetNodeCount(),false);
+		this->visited.resize(graph.GetNodeCount(),false);
+		this->set_Open=new DijkstraSet_Heap(graph.GetNodeCount(),&distance);
 		set_Open->Add(startIndex);
 		distance[startIndex]=0;
 		while(!set_Open->IsEmpty())

@@ -112,6 +112,24 @@ int main2_Dijk()
 
 int main()
 {
+	/*std::vector<float> distance;
+	distance.push_back(5.0);
+	distance.push_back(6.0);
+	distance.push_back(2.5);
+	distance.push_back(3.2);
+	distance.push_back(4.8);
+	distance.push_back(8.7);
+	distance.push_back(7.5);
+	DijkstraSet_Heap heap(7,&distance);
+	heap.Add(6);
+	heap.Add(5);
+	heap.Add(4);
+	heap.Add(3);
+	heap.Add(2);
+	heap.Add(1);
+	heap.Add(0);*/
+
+	
 	main1_Astar();
 	main2_Dijk();
 	system("pause");

@@ -22,20 +22,21 @@ private:
 public:
 	GeodeticCalculator_AStar(AbstractGraph& g,int vstIndex,int vedIndex):graph(g),startIndex(vstIndex),endIndex(vedIndex)
 	{
+		set_Open=0;
+	}
+	~GeodeticCalculator_AStar()
+	{
+		if(set_Open!=0) delete set_Open;
+	}
+	//core functions
+	bool Execute()//main function execute AStar, return true if the end point is reached,false if path to end not exist 
+	{
 		visited.resize(graph.GetNodeCount(),false);
 		gMap.resize(graph.GetNodeCount(),MAX_DIS);
 		fMap.resize(graph.GetNodeCount(),MAX_DIS);
 		previus.resize(graph.GetNodeCount(),-1);
 		flagMap_Close.resize(graph.GetNodeCount(),false);
 		this->set_Open=new AStarSet_Heap(graph.GetNodeCount(),&fMap);
-	}
-	~GeodeticCalculator_AStar()
-	{
-		delete set_Open;
-	}
-	//core functions
-	bool Execute()//main function execute AStar, return true if the end point is reached,false if path to end not exist 
-	{
 		set_Open->Add(startIndex);
 		gMap[startIndex]=0;
 		fMap[startIndex]=GetH(startIndex);
